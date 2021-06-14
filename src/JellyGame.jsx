@@ -21,24 +21,87 @@ const listPCS = (list) => {
     return <tr key={"row-" + idx}>{
       row.map((col, idx) => {
         return <td key={"col-" + idx}>
-          <img key={"jelly-" + idx} src={jellyList[getRandomInt(0, jellyList.length)]}/>
-          <p>{col}</p>
+          <img className="no-drag detection" key={"jelly-" + idx} src={jellyList[getRandomInt(0, jellyList.length)]}/>
+          <p className="detection">{col}</p>
         </td>
       })
     }</tr>;
   })
 }
 
-const test = (e) => {
-  console.log(e)
+let isDrag = false
+let startTag
+let startClientX
+let startClientY
+let tbodyRect
+let newTag
+const MouseEvent = (e) => {
+  if (e.target.className.includes("detection")) {
+    if (!isDrag && e._reactName === "onMouseDown") {
+      isDrag = true
+
+      const el = document.getElementById("tbody-area")
+      tbodyRect = el.getClientRects()[0]
+
+      startTag = e.target
+      startClientX = e.target.parentNode.getClientRects()[0].x
+      startClientY = e.target.parentNode.getClientRects()[0].y
+
+      newTag = document.createElement("div")
+      startTag.parentNode.appendChild(newTag)
+      newTag.className = "area rightBottom"
+      newTag.style.width = "52px"
+      newTag.style.height = "56px"
+    }
+
+    if (isDrag && e._reactName === "onMouseMove") {
+      if (tbodyRect.x > e.clientX || tbodyRect.y > e.clientY) return
+
+      const width = e.clientX - startClientX
+      const height = e.clientY - startClientY
+      const computedNumber = (isMinus, WH) => {
+        const standard = WH.width ? 54 : 58
+        const value = WH.width ? WH.width : WH.height
+
+        if (isMinus) return standard * (Math.ceil(value * -1 / standard) + 1)
+        else return standard * Math.ceil(value / standard)
+      }
+
+      let computedW, computedH
+      if (width >= 0 && height >= 0) {
+        if (!newTag.className.includes("rightBottom")) newTag.className = "area rightBottom"
+        computedW = computedNumber(false, {width})
+        computedH = computedNumber(false, {height})
+      } else if (width < 0 && height >= 0) {
+        if (!newTag.className.includes("leftBottom")) newTag.className = "area leftBottom"
+        computedW = computedNumber(true, {width})
+        computedH = computedNumber(false, {height})
+      } else if (width >= 0 && height < 0) {
+        if (!newTag.className.includes("rightTop")) newTag.className = "area rightTop"
+        computedW = computedNumber(false, {width})
+        computedH = computedNumber(true, {height})
+      } else {
+        if (!newTag.className.includes("leftTop")) newTag.className = "area leftTop"
+        computedW = computedNumber(true, {width})
+        computedH = computedNumber(true, {height})
+      }
+
+      newTag.style.width = `${computedW}px`
+      newTag.style.height = `${computedH}px`
+
+    }
+  }
+
+  if (e._reactName === "onMouseUp" || e.type === 'mouseup') {
+    isDrag = false
+    if (newTag) newTag.remove()
+  }
 }
 
 const JellyGame = () => {
   let time = 180;
   let score = 0
   let interverId
-
-  console.log('re Rendering')
 
   const [timerHeight, setTimerHeight] = useState(null)
   const [list, setList] = useState([])
@@ -66,10 +129,14 @@ const JellyGame = () => {
       setTimer(value * time)
       if (time === 0) clearInterval(interverId)
     }, 1000)
+
+    window.addEventListener('mouseup', e => {
+      MouseEvent(e)
+    })
   }, [])
 
   return (
-      <div className="game-layout">
+      <div className="game-layout" onMouseUp={MouseEvent}>
         <div id="game-top">
           <div className="replay">
             <p>Replay<img src={replay}/></p>
@@ -82,9 +149,9 @@ const JellyGame = () => {
           </div>
         </div>
         <div id="game-content">
-          <div className="game-table-layout">
-            <table className="game-table" onClick={test}>
-              <tbody>
+          <div className="game-table-layout no-drag">
+            <table className="game-table">
+              <tbody id="tbody-area" onMouseDown={MouseEvent} onMouseMove={MouseEvent} onMouseLeave={MouseEvent}>
               {
                 useMemo(() =>
                     listPCS(list), [list]
@@ -93,16 +160,13 @@ const JellyGame = () => {
               </tbody>
             </table>
           </div>
-          <div className="timer">
-            {
-              useMemo(() =>
-                  <div className="timer-inner" style={{height: `${timerHeight}px`}}/>, [timerHeight]
-              )
-            }
-          </div>
+          {useMemo(() =>
+              <div className="timer">
+                <div className="timer-inner" style={{height: `${timerHeight}px`}}/>
+              </div>, [timerHeight])}
         </div>
       </div>
   );
 }
 
-export default JellyGame;
+export default React.memo(JellyGame);
