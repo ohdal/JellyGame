@@ -16,13 +16,74 @@ const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-const listPCS = (list) => {
-  return list.map((row, idx) => {
-    return <tr key={"row-" + idx}>{
-      row.map((col, idx) => {
-        return <td key={"col-" + idx}>
-          <img className="no-drag detection" key={"jelly-" + idx} src={jellyList[getRandomInt(0, jellyList.length)]}/>
-          <p className="detection">{col}</p>
+let startBear
+const checkBear = (id, state, list, setList) => {
+  if (state === "Down") {
+    startBear = id.split('-')
+  } else {
+    const offsetX = newTag.clientHeight / 58
+    const offsetY = newTag.clientWidth / 54
+    const cn = newTag.className.split(' ')[1]
+    const x = Number(startBear[1])
+    const y = Number(startBear[2])
+    let si, ei, sj, ej
+    switch (cn) {
+      case "rightBottom":
+        si = x
+        ei = x + offsetX
+        sj = y
+        ej = y + offsetY
+        break;
+      case "rightTop":
+        si = x - offsetX + 1
+        ei = x + 1
+        sj = y
+        ej = y + offsetY
+        break;
+      case "leftBottom":
+        si = x
+        ei = x + offsetX
+        sj = y - offsetY + 1
+        ej = y + 1
+        break;
+      case "leftTop":
+        si = x - offsetX + 1
+        ei = x + 1
+        sj = y - offsetY + 1
+        ej = y + 1
+        break;
+      default:
+        break;
+    }
+    let count = 0
+    let tempArray = JSON.parse(JSON.stringify(list))
+    for (let i = si; i < ei; i++) {
+      for (let j = sj; j < ej; j++) {
+        if (list[i][j].visible) {
+          count += list[i][j].value
+          tempArray[i][j].visible = false
+        }
+      }
+    }
+
+    if (count === 10) {
+      setList(tempArray)
+    }
+  }
+}
+
+const listPCS = (list, setList) => {
+  return list.map((row, idxr) => {
+    return <tr key={"row-" + idxr}>{
+      row.map((col, idxc) => {
+        return <td key={"col-" + idxc} id={"bear-" + idxr + "-" + idxc}
+                   style={{'visibility': col.visible ? 'visible' : 'hidden'}}
+                   onMouseDown={() => {
+                     checkBear("bear-" + idxr + "-" + idxc, "Down", list, (value) => {setList(value)})
+                   }}
+                   onMouseUp={() => {checkBear("bear-" + idxr + "-" + idxc, "Up", list, (value) => {setList(value)})}}>
+          <img className="no-drag detection" key={"jelly-" + idxc} src={col.src}/>
+          <p className="detection">{col.value}</p>
         </td>
       })
     }</tr>;
@@ -119,7 +180,7 @@ const JellyGame = () => {
     for (let i = 0; i < 10; i++) {
       temp.push([])
       for (let j = 0; j < 15; j++) {
-        temp[i].push(getRandomInt(1, 10))
+        temp[i].push({visible: true, value: getRandomInt(1, 10), src: jellyList[getRandomInt(0, jellyList.length)]})
       }
     }
     setList(temp)
@@ -151,10 +212,10 @@ const JellyGame = () => {
         <div id="game-content">
           <div className="game-table-layout no-drag">
             <table className="game-table">
-              <tbody id="tbody-area" onMouseDown={MouseEvent} onMouseMove={MouseEvent} onMouseLeave={MouseEvent}>
+              <tbody id="tbody-area" onMouseDown={MouseEvent} onMouseMove={MouseEvent}>
               {
                 useMemo(() =>
-                    listPCS(list), [list]
+                    listPCS(list, setList), [list]
                 )
               }
               </tbody>
