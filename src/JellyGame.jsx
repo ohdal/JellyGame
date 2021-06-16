@@ -1,4 +1,5 @@
 import React, {useEffect, useMemo, useState} from 'react';
+//import produce from 'immer'
 import jelly1 from './assets/images/jelly_type_1.png'
 import jelly2 from './assets/images/jelly_type_2.png'
 import jelly3 from './assets/images/jelly_type_3.png'
@@ -82,7 +83,7 @@ const listPCS = (list, setList) => {
                      checkBear("bear-" + idxr + "-" + idxc, "Down", list, (value) => {setList(value)})
                    }}
                    onMouseUp={() => {checkBear("bear-" + idxr + "-" + idxc, "Up", list, (value) => {setList(value)})}}>
-          <img className="no-drag detection" key={"jelly-" + idxc} src={col.src}/>
+          <img alt="jelly" className="no-drag detection" key={"jelly-" + idxc} src={col.src}/>
           <p className="detection">{col.value}</p>
         </td>
       })
@@ -168,7 +169,11 @@ const JellyGame = () => {
   const [list, setList] = useState([])
 
   const setTimer = (value) => {
-    setTimerHeight(value)
+    interverId = setInterval(() => {
+      time--;
+      setTimerHeight(value * time)
+      if (time === 0) clearInterval(interverId)
+    }, 1000)
   }
 
   useEffect(() => {
@@ -184,12 +189,7 @@ const JellyGame = () => {
       }
     }
     setList(temp)
-
-    interverId = setInterval(() => {
-      time--;
-      setTimer(value * time)
-      if (time === 0) clearInterval(interverId)
-    }, 1000)
+    setTimer(value)
 
     window.addEventListener('mouseup', e => {
       MouseEvent(e)
@@ -200,7 +200,7 @@ const JellyGame = () => {
       <div className="game-layout" onMouseUp={MouseEvent}>
         <div id="game-top">
           <div className="replay">
-            <p>Replay<img src={replay}/></p>
+            <p>Replay<img alt="replay" src={replay}/></p>
           </div>
           <div className="score">
             <p>
