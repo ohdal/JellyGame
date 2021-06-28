@@ -73,7 +73,6 @@ const JellyGame = () => {
         startClientX = e.target.parentNode.getClientRects()[0].x
         startClientY = e.target.parentNode.getClientRects()[0].y
 
-
         let tempNewTag = document.createElement("div")
         tempNewTag.className = "area rightBottom"
         tempNewTag.style.width = "52px"
@@ -98,40 +97,47 @@ const JellyGame = () => {
         let computedW, computedH
         let temp = document.createElement("div")
         if (width >= 0 && height >= 0) {
-          if (!newTag.className.includes("rightBottom")) temp.className = "area rightBottom"
+          temp.className = "area rightBottom"
           computedW = computedNumber(false, {width})
           computedH = computedNumber(false, {height})
         } else if (width < 0 && height >= 0) {
-          if (!newTag.className.includes("leftBottom")) temp.className = "area leftBottom"
+          temp.className = "area leftBottom"
           computedW = computedNumber(true, {width})
           computedH = computedNumber(false, {height})
         } else if (width >= 0 && height < 0) {
-          if (!newTag.className.includes("rightTop")) temp.className = "area rightTop"
+          temp.className = "area rightTop"
           computedW = computedNumber(false, {width})
           computedH = computedNumber(true, {height})
         } else {
-          if (!newTag.className.includes("leftTop")) temp.className = "area leftTop"
+          temp.className = "area leftTop"
           computedW = computedNumber(true, {width})
           computedH = computedNumber(true, {height})
         }
 
         temp.style.width = `${computedW}px`
         temp.style.height = `${computedH}px`
+        startTag.parentNode.appendChild(temp)
+        newTag.remove()
         setNewTag(temp)
-
       }
     }
 
     if (e._reactName === "onMouseUp" || e.type === 'mouseup') {
       isDrag = false
-      if (newTag) setNewTag(null)
+      if (newTag) {
+        newTag.remove()
+        setNewTag(null)
+      }
     }
   }, [newTag])
 
   const checkBear = useCallback((id, state,) => {
+
     if (state === "Down") {
       startBear = id.split('-')
     } else {
+      if (!newTag) return
+
       const offsetX = newTag.clientHeight / 58
       const offsetY = newTag.clientWidth / 54
       const cn = newTag.className.split(' ')[1]
@@ -204,34 +210,41 @@ const JellyGame = () => {
   }, [])
 
   return (
-      <div className="game-layout" onMouseUp={MouseEvent}>
-        <div id="game-top">
-          <div className="replay">
-            <p>Replay<img alt="replay" src={replay}/></p>
+      <div className="game-layout" onMouseUp={MouseEvent} onMouseLeave={(e) => {
+        if (newTag) {
+          newTag.remove()
+          setNewTag(null)
+        }
+      }}>
+        <div className="game-layout-inner">
+          <div id="game-top">
+            <div className="replay">
+              <p>Replay<img alt="replay" src={replay}/></p>
+            </div>
+            <div className="score">
+              <p>
+                Score
+                <span>{score}</span>
+              </p>
+            </div>
           </div>
-          <div className="score">
-            <p>
-              Score
-              <span>{score}</span>
-            </p>
+          <div id="game-content">
+            <div className="game-table-layout no-drag">
+              <table className="game-table">
+                <tbody id="tbody-area" onMouseMove={MouseEvent}>
+                {
+                  useMemo(() =>
+                      listPCS(list, MouseEvent, checkBear), [list, newTag]
+                  )
+                }
+                </tbody>
+              </table>
+            </div>
+            {useMemo(() =>
+                <div className="timer">
+                  <div className="timer-inner" style={{height: `${timerHeight}px`}}/>
+                </div>, [timerHeight])}
           </div>
-        </div>
-        <div id="game-content">
-          <div className="game-table-layout no-drag">
-            <table className="game-table">
-              <tbody id="tbody-area" onMouseMove={MouseEvent}>
-              {
-                useMemo(() =>
-                    listPCS(list, MouseEvent, checkBear), [list]
-                )
-              }
-              </tbody>
-            </table>
-          </div>
-          {useMemo(() =>
-              <div className="timer">
-                <div className="timer-inner" style={{height: `${timerHeight}px`}}/>
-              </div>, [timerHeight])}
         </div>
       </div>
   );
