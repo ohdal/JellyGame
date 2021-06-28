@@ -45,12 +45,12 @@ let startClientY
 let tbodyRect
 
 let time = 180;
-let score = 0
 let interverId
 const JellyGame = () => {
   const [timerHeight, setTimerHeight] = useState(null)
   const [list, setList] = useState([])
   const [newTag, setNewTag] = useState(null)
+  const [score, setScore] = useState(0)
 
   const setTimer = useCallback((value) => {
     interverId = setInterval(() => {
@@ -143,6 +143,7 @@ const JellyGame = () => {
       const cn = newTag.className.split(' ')[1]
       const x = Number(startBear[1])
       const y = Number(startBear[2])
+      // start, end
       let si, ei, sj, ej
       switch (cn) {
         case "rightBottom":
@@ -184,10 +185,12 @@ const JellyGame = () => {
       }
 
       if (count === 10) {
+        console.log(score)
+        setScore(score + (ei - si) * (ej - sj))
         setList(tempArray)
       }
     }
-  }, [newTag, list])
+  }, [score, newTag, list])
 
   useEffect(() => {
     const height = document.getElementsByClassName('timer')[0].clientHeight
@@ -221,12 +224,15 @@ const JellyGame = () => {
             <div className="replay">
               <p>Replay<img alt="replay" src={replay}/></p>
             </div>
-            <div className="score">
-              <p>
-                Score
-                <span>{score}</span>
-              </p>
-            </div>
+            {
+              useMemo(() =>
+                  <div className="score">
+                    <p>
+                      Score
+                      <span>{score}</span>
+                    </p>
+                  </div>, [score])
+            }
           </div>
           <div id="game-content">
             <div className="game-table-layout no-drag">
