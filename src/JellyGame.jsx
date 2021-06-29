@@ -5,6 +5,8 @@ import jelly3 from './assets/images/jelly_type_3.png'
 import jelly4 from './assets/images/jelly_type_4.png'
 import jelly5 from './assets/images/jelly_type_5.png'
 import jelly6 from './assets/images/jelly_type_6.png'
+import game_over from './assets/images/gameover.png'
+import game_over_bg from './assets/images/gameover_BG.png'
 import replay from './assets/images/replay.png'
 import './JellyGame.scss'
 
@@ -39,8 +41,8 @@ const listPCS = (list, MouseEvent, checkBear) => {
                      checkBear("bear-" + idxr + "-" + idxc, "Down")
                    }}
                    onMouseUp={() => {checkBear("bear-" + idxr + "-" + idxc, "Up")}}>
-          <img alt="jelly" className="no-drag detection" key={"jelly-" + idxc} src={col.src}/>
-          <p className="detection">{col.value}</p>
+          <img alt="jelly" className="no-drag detection jelly-img" key={"jelly-" + idxc} src={col.src}/>
+          <p className="detection jelly-number">{col.value}</p>
         </td>
       })
     }</tr>;
@@ -252,7 +254,10 @@ const JellyGame = () => {
                 <tbody id="tbody-area" onMouseMove={MouseEvent} onMouseUp={MouseEvent}>
                 {
                   useMemo(() =>
-                      isGameOver ? <td className="gameover-text">GameOver<br/>Score: {score}</td>
+                      isGameOver ?
+                          <td className="gameover-layout">
+                            <div className="gameover-img"><img src={game_over}/></div>
+                            <div className="gameover-text"><p>{score}</p></div></td>
                           : listPCS(list, MouseEvent, checkBear), [isGameOver, list, newTag]
                   )
                 }

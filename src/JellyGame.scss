@@ -3,6 +3,28 @@
   height: 100%;
 }
 
+@keyframes shake {
+  0% {
+    transform: rotate(-6deg);
+  }
+
+  25% {
+    transform: rotate(4deg);
+  }
+
+  50% {
+    transform: rotate(-2deg);
+  }
+
+  75% {
+    transform: rotate(4deg);
+  }
+
+  100% {
+    transform: rotate(-6deg);
+  }
+}
+
 .game-layout-inner {
   position: absolute;
   top: 50%;
@@ -80,7 +102,7 @@
         &.left {
           width: 100px;
           height: 100%;
-          top:0;
+          top: 0;
           left: -100px;
         }
 
@@ -94,7 +116,7 @@
         &.bottom {
           width: calc(100% + 110px);
           height: 100px;
-          bottom : -100px;
+          bottom: -100px;
           left: -55px;
         }
       }
@@ -110,16 +132,58 @@
         td {
           position: relative;
 
-          &.gameover-text{
-            color: white;
+          &.gameover-layout {
+
+            > div {
+              margin: 0 auto;
+            }
+
+            .gameover-img {
+              width: 600px;
+              height: 150px;
+              background: url("./assets/images/gameover_BG.png");
+              background-repeat: no-repeat;
+              background-size: cover;
+
+              img {
+                width: 100%;
+                height: 100%;
+                animation: shake 0.8s Infinite;
+              }
+            }
+
+            .gameover-text {
+              position: relative;
+              color: #66a7ba;
+              font-size: 30px;
+              font-weight: bold;
+              width: 200px;
+              height: 200px;
+              background-image: url("./assets/images/jelly_type_6.png");
+              background-repeat: no-repeat;
+              background-size: contain;
+
+              p {
+                position: absolute;
+                margin: 0;
+                top: 65%;
+                left: 48%;
+                transform: translate(-50%, -50%);
+                width: 80px;
+                height: 80px;
+                line-height: 80px;
+                background: white;
+                border-radius: 50%;
+              }
+            }
           }
 
-          img {
+          .jelly-img {
             width: 50px;
             height: 50px;
           }
 
-          p {
+          .jelly-number {
             background: white;
             width: 20px;
             height: 20px;
