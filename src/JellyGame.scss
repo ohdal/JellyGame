@@ -23,10 +23,15 @@
     .replay {
       text-align: left;
 
-      img {
-        width: 30px;
-        height: 30px;
-        position: absolute;
+      > p {
+        width: 100px;
+        cursor: pointer;
+
+        img {
+          width: 30px;
+          height: 30px;
+          position: absolute;
+        }
       }
     }
 
@@ -58,64 +63,108 @@
       -webkit-user-drag: none;
     }
 
-    .game-table {
-      background: #282c34;
-      border: 3px solid #66a7ba;
-      border-radius: 10px;
-      padding: 10px;
+    .game-table-layout {
+      position: relative;
 
-      td {
-        position: relative;
+      .detection-area {
+        position: absolute;
+        z-index: -1;
 
-        img {
-          width: 50px;
-          height: 50px;
+        &.top {
+          width: calc(100% + 110px);
+          height: 100px;
+          top: -100px;
+          left: -55px;
         }
 
-        p {
-          background: white;
-          width: 20px;
-          height: 20px;
-          border-radius: 50%;
-          position: absolute;
-          top: 25%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          z-index: 2;
-          text-align: center;
-          font-weight: bold;
-          color: #616161;
+        &.left {
+          width: 100px;
+          height: 100%;
+          top:0;
+          left: -100px;
         }
 
-        .area {
-          position: absolute;
-          border: 1px solid #61dafb;
-          background: #66a7ba;
-          opacity: 50%;
-          z-index: 1;
+        &.right {
+          width: 100px;
+          height: 100%;
+          top: 0;
+          right: -100px;
+        }
 
-          &.rightBottom {
-            top: 0;
-            left: 0;
+        &.bottom {
+          width: calc(100% + 110px);
+          height: 100px;
+          bottom : -100px;
+          left: -55px;
+        }
+      }
+
+      .game-table {
+        width: 838px;
+        height: 608px;
+        background: #282c34;
+        border: 3px solid #66a7ba;
+        border-radius: 10px;
+        padding: 10px;
+
+        td {
+          position: relative;
+
+          &.gameover-text{
+            color: white;
           }
 
-          &.rightTop {
-            bottom: 0;
-            left: 0;
+          img {
+            width: 50px;
+            height: 50px;
           }
 
-          &.leftBottom {
-            top: 0;
-            right: 0;
+          p {
+            background: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            position: absolute;
+            top: 25%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+            text-align: center;
+            font-weight: bold;
+            color: #616161;
           }
 
-          &.leftTop {
-            bottom: 0;
-            right: 0;
+          .area {
+            position: absolute;
+            border: 1px solid #61dafb;
+            background: #66a7ba;
+            opacity: 50%;
+            z-index: 1;
+
+            &.rightBottom {
+              top: 0;
+              left: 0;
+            }
+
+            &.rightTop {
+              bottom: 0;
+              left: 0;
+            }
+
+            &.leftBottom {
+              top: 0;
+              right: 0;
+            }
+
+            &.leftTop {
+              bottom: 0;
+              right: 0;
+            }
           }
         }
       }
     }
+
 
     .timer {
       position: relative;

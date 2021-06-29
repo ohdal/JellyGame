@@ -1,5 +1,4 @@
 import React, {useEffect, useMemo, useState, useCallback} from 'react';
-//import produce from 'immer'
 import jelly1 from './assets/images/jelly_type_1.png'
 import jelly2 from './assets/images/jelly_type_2.png'
 import jelly3 from './assets/images/jelly_type_3.png'
@@ -17,8 +16,18 @@ const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min)) + min;
 }
 
-let startBear
+const createList = () => {
+  let temp = []
+  for (let i = 0; i < 10; i++) {
+    temp.push([])
+    for (let j = 0; j < 15; j++) {
+      temp[i].push({visible: true, value: getRandomInt(1, 10), src: jellyList[getRandomInt(0, jellyList.length)]})
+    }
+  }
+  return temp
+}
 
+let startBear
 const listPCS = (list, MouseEvent, checkBear) => {
   return list.map((row, idxr) => {
     return <tr key={"row-" + idxr}>{
@@ -38,33 +47,28 @@ const listPCS = (list, MouseEvent, checkBear) => {
   })
 }
 
-let isDrag = false
 let startTag
 let startClientX
 let startClientY
 let tbodyRect
 
-let time = 180;
+let time = 150;
 let interverId
 const JellyGame = () => {
   const [timerHeight, setTimerHeight] = useState(null)
   const [list, setList] = useState([])
   const [newTag, setNewTag] = useState(null)
   const [score, setScore] = useState(0)
-
-  const setTimer = useCallback((value) => {
-    interverId = setInterval(() => {
-      time--;
-      setTimerHeight(value * time)
-      if (time === 0) clearInterval(interverId)
-    }, 1000)
-  }, [timerHeight])
+  const [isDrag, setIsDrag] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [isGameOver, setIsGameOver] = useState(false)
+  const [playCnt, setPlayCnt] = useState(0)
 
   const MouseEvent = useCallback((e) => {
     if (e.target.className.includes("detection")) {
       if (!isDrag && e._reactName === "onMouseDown") {
 //        debugger;
-        isDrag = true
+        setIsDrag(true)
 
         const el = document.getElementById("tbody-area")
         tbodyRect = el.getClientRects()[0]
@@ -122,14 +126,10 @@ const JellyGame = () => {
       }
     }
 
-    if (e._reactName === "onMouseUp" || e.type === 'mouseup') {
-      isDrag = false
-      if (newTag) {
-        newTag.remove()
-        setNewTag(null)
-      }
+    if (e._reactName === "onMouseUp" && isDrag) {
+      setIsDrag(false)
     }
-  }, [newTag])
+  }, [isDrag, newTag])
 
   const checkBear = useCallback((id, state,) => {
 
@@ -185,7 +185,6 @@ const JellyGame = () => {
       }
 
       if (count === 10) {
-        console.log(score)
         setScore(score + (ei - si) * (ej - sj))
         setList(tempArray)
       }
@@ -193,36 +192,49 @@ const JellyGame = () => {
   }, [score, newTag, list])
 
   useEffect(() => {
+    if (interverId) {
+      clearInterval(interverId)
+      setScore(0)
+      setIsGameOver(false)
+      time = 150
+    }
+
     const height = document.getElementsByClassName('timer')[0].clientHeight
     const value = height / time
     setTimerHeight(height)
 
-    let temp = []
-    for (let i = 0; i < 10; i++) {
-      temp.push([])
-      for (let j = 0; j < 15; j++) {
-        temp[i].push({visible: true, value: getRandomInt(1, 10), src: jellyList[getRandomInt(0, jellyList.length)]})
-      }
-    }
-    setList(temp)
-    setTimer(value)
+    setIsLoading(true)
+    setList(null)
+    setList(createList())
 
-    window.addEventListener('mouseup', e => {
-      MouseEvent(e)
-    })
-  }, [])
+    interverId = setInterval(() => {
+      time--;
+      setTimerHeight(value * time)
+      if (time === 0) {
+        clearInterval(interverId)
+        setIsGameOver(true)
+      }
+    }, 1000)
+
+    setIsLoading(false)
+  }, [playCnt])
+
+  useEffect(() => {
+    if (newTag && !isDrag) {
+      newTag.remove()
+      setNewTag(null)
+    }
+  }, [isDrag])
 
   return (
-      <div className="game-layout" onMouseUp={MouseEvent} onMouseLeave={(e) => {
-        if (newTag) {
-          newTag.remove()
-          setNewTag(null)
-        }
-      }}>
+      <div className="game-layout">
         <div className="game-layout-inner">
           <div id="game-top">
             <div className="replay">
-              <p>Replay<img alt="replay" src={replay}/></p>
+              <p onClick={() => {
+                setPlayCnt(p => p + 1)
+              }}>
+                Replay<img alt="replay" src={replay}/></p>
             </div>
             {
               useMemo(() =>
@@ -237,14 +249,19 @@ const JellyGame = () => {
           <div id="game-content">
             <div className="game-table-layout no-drag">
               <table className="game-table">
-                <tbody id="tbody-area" onMouseMove={MouseEvent}>
+                <tbody id="tbody-area" onMouseMove={MouseEvent} onMouseUp={MouseEvent}>
                 {
                   useMemo(() =>
-                      listPCS(list, MouseEvent, checkBear), [list, newTag]
+                      isGameOver ? <td className="gameover-text">GameOver<br/>Score: {score}</td>
+                          : listPCS(list, MouseEvent, checkBear), [isGameOver, list, newTag]
                   )
                 }
                 </tbody>
               </table>
+              <div className="detection-area top" onMouseEnter={() => {setIsDrag(false)}}/>
+              <div className="detection-area left" onMouseEnter={() => {setIsDrag(false)}}/>
+              <div className="detection-area right" onMouseEnter={() => {setIsDrag(false)}}/>
+              <div className="detection-area bottom" onMouseEnter={() => {setIsDrag(false)}}/>
             </div>
             {useMemo(() =>
                 <div className="timer">
