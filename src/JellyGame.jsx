@@ -6,7 +6,6 @@ import jelly4 from './assets/images/jelly_type_4.png'
 import jelly5 from './assets/images/jelly_type_5.png'
 import jelly6 from './assets/images/jelly_type_6.png'
 import game_over from './assets/images/gameover.png'
-import game_over_bg from './assets/images/gameover_BG.png'
 import replay from './assets/images/replay.png'
 import './JellyGame.scss'
 
@@ -134,7 +133,6 @@ const JellyGame = () => {
   }, [isDrag, newTag])
 
   const checkBear = useCallback((id, state,) => {
-
     if (state === "Down") {
       startBear = id.split('-')
     } else {
@@ -233,18 +231,16 @@ const JellyGame = () => {
         <div className="game-layout-inner">
           <div id="game-top">
             <div className="replay">
-              <p onClick={() => {
+              <div onClick={() => {
                 setPlayCnt(p => p + 1)
               }}>
-                Replay<img alt="replay" src={replay}/></p>
+                Replay<img alt="replay" src={replay}/></div>
             </div>
             {
               useMemo(() =>
                   <div className="score">
-                    <p>
-                      Score
-                      <span>{score}</span>
-                    </p>
+                    Score
+                    <span>{score}</span>
                   </div>, [score])
             }
           </div>
@@ -255,9 +251,12 @@ const JellyGame = () => {
                 {
                   useMemo(() =>
                       isGameOver ?
-                          <td className="gameover-layout">
-                            <div className="gameover-img"><img src={game_over}/></div>
-                            <div className="gameover-text"><p>{score}</p></div></td>
+                          <tr>
+                            <td className="gameover-layout">
+                              <div className="gameover-img"><img alt="" src={game_over}/></div>
+                              <div className="gameover-text"><p>{score}</p></div>
+                            </td>
+                          </tr>
                           : listPCS(list, MouseEvent, checkBear), [isGameOver, list, newTag]
                   )
                 }

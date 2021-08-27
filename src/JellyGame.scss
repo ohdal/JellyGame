@@ -26,6 +26,7 @@
 }
 
 .game-layout-inner {
+  width: 895px;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -37,28 +38,36 @@
     color: #66a7ba;
     padding-right: 56px;
 
-    > * {
-      display: inline-block;
-      width: 50%;
+    > div {
+      margin-bottom: 10px;
     }
 
     .replay {
+      float: left;
       text-align: left;
 
-      > p {
+      > div {
         width: 100px;
         cursor: pointer;
+        height: 35px;
 
         img {
           width: 30px;
           height: 30px;
           position: absolute;
         }
+
+        &:hover {
+          font-size: 22px;
+        }
       }
     }
 
     .score {
+      height: 35px;
+      float: right;
       text-align: right;
+
 
       span {
         border-radius: 20px;
