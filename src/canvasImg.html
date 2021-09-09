@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>canvas</title>
+  <style>
+    .canvas {
+      background: aliceblue;
+    }
+
+    .color-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 0;
+      margin-right: 10px;
+    }
+
+    .color-btn[data-color='black'] {
+      background: black
+    }
+
+    .color-btn[data-color='red'] {
+      background: red
+    }
+
+    .color-btn[data-color='blue'] {
+      background: blue
+    }
+
+    .color-btn[data-color='green'] {
+      background: green
+    }
+  </style>
+</head>
+<body>
+<canvas class="canvas" width="600" height="400">이 브라우저는 캔버스를 지원하지 않습니다.</canvas>
+<div class="color-layout">
+  <button class="color-btn" data-type="color" data-color="black"/>
+  <button class="color-btn" data-type="color" data-color="red"/>
+  <button class="color-btn" data-type="color" data-color="blue"/>
+  <button class="color-btn" data-type="color" data-color="green"/>
+  <button class="img-btn" data-type="img">이미지 버튼</button>
+  <a type="download"></a>
+</div>
+<button class="save-btn" data-type="img">이미지 저장</button>
+<div class="save-img"/>
+<script>
+  const canvas = document.getElementsByClassName('canvas')[0]
+  const body = document.getElementsByTagName("BODY")[0]
+  const colorLayout = document.getElementsByClassName('color-layout')[0]
+  const saveBtn = document.getElementsByClassName('save-btn')[0]
+  const saveImg = document.getElementsByClassName('save-img')[0]
+  const context = canvas.getContext('2d')
+  let isDown = false
+  let clickType = 'color'
+  let selectedColor = 'black'
+
+  const imgElem = new Image()
+  imgElem.src = './assets/images/replay.png'
+
+  saveBtn.addEventListener('click', (e) => {
+    const imgTemp = new Image()
+    imgTemp.src = canvas.toDataURL('image/png')
+    saveImg.appendChild(imgTemp)
+  })
+
+  colorLayout.addEventListener('click', (e) => {
+    clickType = e.target.getAttribute('data-type')
+//    selectedColor = e.target.dataset.color
+    selectedColor = e.target.getAttribute('data-color')
+    context.fillStyle = selectedColor
+  })
+
+  function draw(e) {
+    context.beginPath()
+
+    switch (clickType) {
+      case "img":
+        context.drawImage(imgElem, e.layerX, e.layerY, 50, 50)
+        isDown = false
+        break;
+      case "color":
+        context.arc(e.layerX, e.layerY, 10, 0, Math.PI * 2, false)
+        context.fill()
+        break;
+      default:
+        break;
+    }
+  }
+
+  function downHandler(e) {
+    isDown = true
+    draw(e)
+  }
+
+  function moveHandler(e) {
+    if (!isDown) return
+    draw(e)
+  }
+
+  canvas.addEventListener('mousedown', downHandler)
+  canvas.addEventListener('mousemove', moveHandler)
+  body.addEventListener('mouseup', () => {isDown = false})
+</script>
+</body>
+</html>
