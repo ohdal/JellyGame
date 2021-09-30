@@ -53,6 +53,26 @@ let startClientX
 let startClientY
 let tbodyRect
 
+let thTimer;
+let count = 0;
+const throttle = (data, fn, delay) => {
+  let w = data.style.width
+  let h = data.style.height
+  if (!thTimer) {
+//    count++
+//    console.log(count)
+    thTimer = setTimeout(() => {
+      thTimer = null;
+      const temp = fn()
+
+      if (temp.w !== w && temp.h !== h) {
+//        console.log('in')
+//        fn()
+      }
+    }, delay)
+  }
+}
+
 let time = 150;
 let interverId
 const JellyGame = () => {
@@ -89,41 +109,47 @@ const JellyGame = () => {
       if (isDrag && e._reactName === "onMouseMove") {
         if (tbodyRect.x > e.clientX || tbodyRect.y > e.clientY) return
 
-        const width = e.clientX - startClientX
-        const height = e.clientY - startClientY
-        const computedNumber = (isMinus, WH) => {
-          const standard = WH.width ? 54 : 58
-          const value = WH.width ? WH.width : WH.height
+        count++
+        console.log(count)
+//        throttle(newTag, () => {
+          const width = e.clientX - startClientX
+          const height = e.clientY - startClientY
+          const computedNumber = (isMinus, WH) => {
+            const standard = WH.width ? 54 : 58
+            const value = WH.width ? WH.width : WH.height
 
-          if (isMinus) return standard * (Math.ceil(value * -1 / standard) + 1)
-          else return standard * Math.ceil(value / standard)
-        }
+            if (isMinus) return standard * (Math.ceil(value * -1 / standard) + 1)
+            else return standard * Math.ceil(value / standard)
+          }
 
-        let computedW, computedH
-        let temp = document.createElement("div")
-        if (width >= 0 && height >= 0) {
-          temp.className = "area rightBottom"
-          computedW = computedNumber(false, {width})
-          computedH = computedNumber(false, {height})
-        } else if (width < 0 && height >= 0) {
-          temp.className = "area leftBottom"
-          computedW = computedNumber(true, {width})
-          computedH = computedNumber(false, {height})
-        } else if (width >= 0 && height < 0) {
-          temp.className = "area rightTop"
-          computedW = computedNumber(false, {width})
-          computedH = computedNumber(true, {height})
-        } else {
-          temp.className = "area leftTop"
-          computedW = computedNumber(true, {width})
-          computedH = computedNumber(true, {height})
-        }
+          let computedW, computedH
+          let temp = document.createElement("div")
+          if (width >= 0 && height >= 0) {
+            temp.className = "area rightBottom"
+            computedW = computedNumber(false, {width})
+            computedH = computedNumber(false, {height})
+          } else if (width < 0 && height >= 0) {
+            temp.className = "area leftBottom"
+            computedW = computedNumber(true, {width})
+            computedH = computedNumber(false, {height})
+          } else if (width >= 0 && height < 0) {
+            temp.className = "area rightTop"
+            computedW = computedNumber(false, {width})
+            computedH = computedNumber(true, {height})
+          } else {
+            temp.className = "area leftTop"
+            computedW = computedNumber(true, {width})
+            computedH = computedNumber(true, {height})
+          }
 
-        temp.style.width = `${computedW}px`
-        temp.style.height = `${computedH}px`
-        startTag.parentNode.appendChild(temp)
-        newTag.remove()
-        setNewTag(temp)
+          temp.style.width = `${computedW}px`
+          temp.style.height = `${computedH}px`
+          startTag.parentNode.appendChild(temp)
+          newTag.remove()
+          setNewTag(temp)
+
+//          return {dir: temp.className.split(' ')[1], w: computedW, h: computedH,}
+//        }, 50)
       }
     }
 
@@ -231,10 +257,10 @@ const JellyGame = () => {
         <div className="game-layout-inner">
           <div id="game-top">
             <div className="replay">
-              <div onClick={() => {
+              <a onClick={() => {
                 setPlayCnt(p => p + 1)
               }}>
-                Replay<img alt="replay" src={replay}/></div>
+                Replay<img alt="replay" src={replay}/></a>
             </div>
             {
               useMemo(() =>
