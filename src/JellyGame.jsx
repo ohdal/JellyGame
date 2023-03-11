@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState, useCallback} from 'react';
+import React, { useEffect, useMemo, useState, useCallback } from 'react';
 import jelly1 from './assets/images/jelly_type_1.png'
 import jelly2 from './assets/images/jelly_type_2.png'
 import jelly3 from './assets/images/jelly_type_3.png'
@@ -20,7 +20,7 @@ const createList = () => {
   for (let i = 0; i < 10; i++) {
     temp.push([])
     for (let j = 0; j < 15; j++) {
-      temp[i].push({visible: true, value: getRandomInt(1, 10), src: jellyList[getRandomInt(0, jellyList.length)]})
+      temp[i].push({ visible: true, value: getRandomInt(1, 10), src: jellyList[getRandomInt(0, jellyList.length)] })
     }
   }
   return temp
@@ -32,13 +32,13 @@ const listPCS = (list, MouseEvent, checkBear) => {
     return <tr key={"row-" + idxr}>{
       row.map((col, idxc) => {
         return <td key={"col-" + idxc} id={"bear-" + idxr + "-" + idxc}
-                   style={{'visibility': col.visible ? 'visible' : 'hidden'}}
-                   onMouseDown={(e) => {
-                     MouseEvent(e)
-                     checkBear("bear-" + idxr + "-" + idxc, "Down")
-                   }}
-                   onMouseUp={() => {checkBear("bear-" + idxr + "-" + idxc, "Up")}}>
-          <img alt="jelly" className="no-drag detection jelly-img" key={"jelly-" + idxc} src={col.src}/>
+          style={{ 'visibility': col.visible ? 'visible' : 'hidden' }}
+          onMouseDown={(e) => {
+            MouseEvent(e)
+            checkBear("bear-" + idxr + "-" + idxc, "Down")
+          }}
+          onMouseUp={() => { checkBear("bear-" + idxr + "-" + idxc, "Up") }}>
+          <img alt="jelly" className="no-drag detection jelly-img" key={"jelly-" + idxc} src={col.src} />
           <p className="detection jelly-number">{col.value}</p>
         </td>
       })
@@ -57,15 +57,15 @@ const throttle = (data, fn, delay) => {
   let w = data.style.width
   let h = data.style.height
   if (!thTimer) {
-//    count++
-//    console.log(count)
+    //    count++
+    //    console.log(count)
     thTimer = setTimeout(() => {
       thTimer = null;
       const temp = fn()
 
       if (temp.w !== w && temp.h !== h) {
-//        console.log('in')
-//        fn()
+        //        console.log('in')
+        //        fn()
       }
     }, delay)
   }
@@ -86,7 +86,7 @@ const JellyGame = () => {
   const MouseEvent = useCallback((e) => {
     if (e.target.className.includes("detection")) {
       if (!isDrag && e._reactName === "onMouseDown") {
-//        debugger;
+        //        debugger;
         setIsDrag(true)
 
         const el = document.getElementById("tbody-area")
@@ -109,45 +109,45 @@ const JellyGame = () => {
 
         count++
         console.log(count)
-//        throttle(newTag, () => {
-          const width = e.clientX - startClientX
-          const height = e.clientY - startClientY
-          const computedNumber = (isMinus, WH) => {
-            const standard = WH.width ? 54 : 58
-            const value = WH.width ? WH.width : WH.height
+        //        throttle(newTag, () => {
+        const width = e.clientX - startClientX
+        const height = e.clientY - startClientY
+        const computedNumber = (isMinus, WH) => {
+          const standard = WH.width ? 54 : 58
+          const value = WH.width ? WH.width : WH.height
 
-            if (isMinus) return standard * (Math.ceil(value * -1 / standard) + 1)
-            else return standard * Math.ceil(value / standard)
-          }
+          if (isMinus) return standard * (Math.ceil(value * -1 / standard) + 1)
+          else return standard * Math.ceil(value / standard)
+        }
 
-          let computedW, computedH
-          let temp = document.createElement("div")
-          if (width >= 0 && height >= 0) {
-            temp.className = "area rightBottom"
-            computedW = computedNumber(false, {width})
-            computedH = computedNumber(false, {height})
-          } else if (width < 0 && height >= 0) {
-            temp.className = "area leftBottom"
-            computedW = computedNumber(true, {width})
-            computedH = computedNumber(false, {height})
-          } else if (width >= 0 && height < 0) {
-            temp.className = "area rightTop"
-            computedW = computedNumber(false, {width})
-            computedH = computedNumber(true, {height})
-          } else {
-            temp.className = "area leftTop"
-            computedW = computedNumber(true, {width})
-            computedH = computedNumber(true, {height})
-          }
+        let computedW, computedH
+        let temp = document.createElement("div")
+        if (width >= 0 && height >= 0) {
+          temp.className = "area rightBottom"
+          computedW = computedNumber(false, { width })
+          computedH = computedNumber(false, { height })
+        } else if (width < 0 && height >= 0) {
+          temp.className = "area leftBottom"
+          computedW = computedNumber(true, { width })
+          computedH = computedNumber(false, { height })
+        } else if (width >= 0 && height < 0) {
+          temp.className = "area rightTop"
+          computedW = computedNumber(false, { width })
+          computedH = computedNumber(true, { height })
+        } else {
+          temp.className = "area leftTop"
+          computedW = computedNumber(true, { width })
+          computedH = computedNumber(true, { height })
+        }
 
-          temp.style.width = `${computedW}px`
-          temp.style.height = `${computedH}px`
-          startTag.parentNode.appendChild(temp)
-          newTag.remove()
-          setNewTag(temp)
+        temp.style.width = `${computedW}px`
+        temp.style.height = `${computedH}px`
+        startTag.parentNode.appendChild(temp)
+        newTag.remove()
+        setNewTag(temp)
 
-//          return {dir: temp.className.split(' ')[1], w: computedW, h: computedH,}
-//        }, 50)
+        //          return {dir: temp.className.split(' ')[1], w: computedW, h: computedH,}
+        //        }, 50)
       }
     }
 
@@ -251,53 +251,53 @@ const JellyGame = () => {
   }, [isDrag])
 
   return (
-      <div className="game-layout">
-        <div className="game-layout-inner">
-          <div id="game-top">
-            <div className="replay">
-              <a onClick={() => {
-                setPlayCnt(p => p + 1)
-              }}>
-                Replay<img alt="replay" src={replay}/></a>
-            </div>
-            {
-              useMemo(() =>
-                  <div className="score">
-                    Score
-                    <span>{score}</span>
-                  </div>, [score])
-            }
+    <div className="game-layout">
+      <div className="game-layout-inner">
+        <div id="game-top">
+          <div className="replay">
+            <a onClick={() => {
+              setPlayCnt(p => p + 1)
+            }}>
+              Replay<img alt="replay" src={replay} /></a>
           </div>
-          <div id="game-content">
-            <div className="game-table-layout no-drag">
-              <table className="game-table">
-                <tbody id="tbody-area" onMouseMove={MouseEvent} onMouseUp={MouseEvent}>
+          {
+            useMemo(() =>
+              <div className="score">
+                Score
+                <span>{score}</span>
+              </div>, [score])
+          }
+        </div>
+        <div id="game-content">
+          <div className="game-table-layout no-drag">
+            <table className="game-table">
+              <tbody id="tbody-area" onMouseMove={MouseEvent} onMouseUp={MouseEvent}>
                 {
                   useMemo(() =>
-                      isGameOver ?
-                          <tr>
-                            <td className="gameover-layout">
-                              <div className="gameover-img"><img alt="" src={game_over}/></div>
-                              <div className="gameover-text"><p>{score}</p></div>
-                            </td>
-                          </tr>
-                          : listPCS(list, MouseEvent, checkBear), [isGameOver, list, newTag]
+                    isGameOver ?
+                      <tr>
+                        <td className="gameover-layout">
+                          <div className="gameover-img"><img alt="" src={game_over} /></div>
+                          <div className="gameover-text"><p>{score}</p></div>
+                        </td>
+                      </tr>
+                      : listPCS(list, MouseEvent, checkBear), [isGameOver, list, newTag]
                   )
                 }
-                </tbody>
-              </table>
-              <div className="detection-area top" onMouseEnter={() => {setIsDrag(false)}}/>
-              <div className="detection-area left" onMouseEnter={() => {setIsDrag(false)}}/>
-              <div className="detection-area right" onMouseEnter={() => {setIsDrag(false)}}/>
-              <div className="detection-area bottom" onMouseEnter={() => {setIsDrag(false)}}/>
-            </div>
-            {useMemo(() =>
-                <div className="timer">
-                  <div className="timer-inner" style={{height: `${timerHeight}px`}}/>
-                </div>, [timerHeight])}
+              </tbody>
+            </table>
+            <div className="detection-area top" onMouseEnter={() => { setIsDrag(false) }} />
+            <div className="detection-area left" onMouseEnter={() => { setIsDrag(false) }} />
+            <div className="detection-area right" onMouseEnter={() => { setIsDrag(false) }} />
+            <div className="detection-area bottom" onMouseEnter={() => { setIsDrag(false) }} />
           </div>
+          {useMemo(() =>
+            <div className="timer">
+              <div className="timer-inner" style={{ height: `${timerHeight}px` }} />
+            </div>, [timerHeight])}
         </div>
       </div>
+    </div>
   );
 }
 
