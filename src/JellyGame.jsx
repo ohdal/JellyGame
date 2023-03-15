@@ -65,7 +65,7 @@ const throttle = (data, fn, delay) => {
 
       if (temp.w !== w && temp.h !== h) {
         //        console.log('in')
-        //        fn()
+        // fn()
       }
     }, delay)
   }
@@ -109,45 +109,45 @@ const JellyGame = () => {
 
         count++
         console.log(count)
-        //        throttle(newTag, () => {
-        const width = e.clientX - startClientX
-        const height = e.clientY - startClientY
-        const computedNumber = (isMinus, WH) => {
-          const standard = WH.width ? 54 : 58
-          const value = WH.width ? WH.width : WH.height
+        throttle(newTag, () => {
+          const width = e.clientX - startClientX
+          const height = e.clientY - startClientY
+          const computedNumber = (isMinus, WH) => {
+            const standard = WH.width ? 54 : 58
+            const value = WH.width ? WH.width : WH.height
 
-          if (isMinus) return standard * (Math.ceil(value * -1 / standard) + 1)
-          else return standard * Math.ceil(value / standard)
-        }
+            if (isMinus) return standard * (Math.ceil(value * -1 / standard) + 1)
+            else return standard * Math.ceil(value / standard)
+          }
 
-        let computedW, computedH
-        let temp = document.createElement("div")
-        if (width >= 0 && height >= 0) {
-          temp.className = "area rightBottom"
-          computedW = computedNumber(false, { width })
-          computedH = computedNumber(false, { height })
-        } else if (width < 0 && height >= 0) {
-          temp.className = "area leftBottom"
-          computedW = computedNumber(true, { width })
-          computedH = computedNumber(false, { height })
-        } else if (width >= 0 && height < 0) {
-          temp.className = "area rightTop"
-          computedW = computedNumber(false, { width })
-          computedH = computedNumber(true, { height })
-        } else {
-          temp.className = "area leftTop"
-          computedW = computedNumber(true, { width })
-          computedH = computedNumber(true, { height })
-        }
+          let computedW, computedH
+          let temp = document.createElement("div")
+          if (width >= 0 && height >= 0) {
+            temp.className = "area rightBottom"
+            computedW = computedNumber(false, { width })
+            computedH = computedNumber(false, { height })
+          } else if (width < 0 && height >= 0) {
+            temp.className = "area leftBottom"
+            computedW = computedNumber(true, { width })
+            computedH = computedNumber(false, { height })
+          } else if (width >= 0 && height < 0) {
+            temp.className = "area rightTop"
+            computedW = computedNumber(false, { width })
+            computedH = computedNumber(true, { height })
+          } else {
+            temp.className = "area leftTop"
+            computedW = computedNumber(true, { width })
+            computedH = computedNumber(true, { height })
+          }
 
-        temp.style.width = `${computedW}px`
-        temp.style.height = `${computedH}px`
-        startTag.parentNode.appendChild(temp)
-        newTag.remove()
-        setNewTag(temp)
+          temp.style.width = `${computedW}px`
+          temp.style.height = `${computedH}px`
+          startTag.parentNode.appendChild(temp)
+          newTag.remove()
+          setNewTag(temp)
 
-        //          return {dir: temp.className.split(' ')[1], w: computedW, h: computedH,}
-        //        }, 50)
+          return { dir: temp.className.split(' ')[1], w: computedW, h: computedH, }
+        }, 50)
       }
     }
 
