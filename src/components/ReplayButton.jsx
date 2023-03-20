@@ -6,10 +6,13 @@ const Wrapper = styled.div`
   float: left;
   text-align: left;
 
-  > a {
+  > button {
     width: 100px;
-    cursor: pointer;
     height: 35px;
+    background: transparent;
+    border: none;
+    outline: none;
+    cursor: pointer;
 
     img {
       width: 30px;
@@ -28,9 +31,9 @@ export default function ReplayButton(props) {
 
   return (
     <Wrapper>
-      <a onClick={handleReplayButton}>
+      <button onClick={handleReplayButton}>
         Replay<img alt="replay" src={replay} />
-      </a>
+      </button>
     </Wrapper>
   )
 }

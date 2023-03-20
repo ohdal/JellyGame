@@ -17,13 +17,13 @@ const TimerInner = styled.div`
   bottom: 0;
 `;
 
-const TIME_VALUE = 10;
+const TIME_VALUE = 150;
 let time = TIME_VALUE;
 let interverId = null;
 const Timer = (props) => {
   const { playCnt, changeIsGameOver } = props;
   const [timerHeight, setTimerHeight] = useState(null);
-  
+
   const timerDiv = useRef();
 
   useEffect(() => {
@@ -45,7 +45,7 @@ const Timer = (props) => {
         changeIsGameOver(true);
       }
     }, 1000)
-  }, [playCnt])
+  }, [playCnt, changeIsGameOver])
 
   return (
     <Wrapper ref={timerDiv}>

@@ -27,10 +27,13 @@ const GameLayoutInner = styled.div`
 `;
 
 const Toolbar = styled.div`
+padding-right: 56px;
+
+* {
   font-size: 20px;
   font-weight: bold;
   color: #66a7ba;
-  padding-right: 56px;
+}
 
   > * {
     margin-bottom: 10px;
@@ -76,7 +79,7 @@ export default function GamePage() {
   }
 
   useEffect(() => {
-    changeIsGameOver(false);
+    changeIsGameOver(false)
     changeScore(0);
     createList();
   }, [playCnt])
