@@ -17,9 +17,9 @@ const TimerInner = styled.div`
   bottom: 0;
 `;
 
-const TIME_VALUE = 150;
+const TIME_VALUE = 5;
 let time = TIME_VALUE;
-let interverId = null;
+let intervalId = null;
 const Timer = (props) => {
   const { playCnt, changeIsGameOver } = props;
   const [timerHeight, setTimerHeight] = useState(null);
@@ -27,24 +27,26 @@ const Timer = (props) => {
   const timerDiv = useRef();
 
   useEffect(() => {
-    if(interverId) {
-      clearInterval(interverId);
-      time = TIME_VALUE;
+    console.log('in');
+    time = TIME_VALUE;
+
+    if (intervalId) {
+      clearInterval(intervalId);
+    } else {
+      const height = timerDiv.current.clientHeight;
+      const value = height / time;
+      setTimerHeight(height);
+
+      intervalId = setInterval(() => {
+        time--;
+        setTimerHeight(value * time);
+        if (time === 0) {
+          clearInterval(intervalId);
+          intervalId = null;
+          changeIsGameOver(true);
+        }
+      }, 1000)
     }
-
-    time = TIME_VALUE
-    const height = timerDiv.current.clientHeight;
-    const value = height / time;
-    setTimerHeight(height);
-
-    interverId = setInterval(() => {
-      time--;
-      setTimerHeight(value * time);
-      if (time === 0) {
-        clearInterval(interverId);
-        changeIsGameOver(true);
-      }
-    }, 1000)
   }, [playCnt, changeIsGameOver])
 
   return (

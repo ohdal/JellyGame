@@ -66,23 +66,23 @@ export default function GamePage() {
     setList(temp);
   }, [])
 
-  const changeScore = (value) => {
+  const changeScore = useCallback((value) => {
     setScore(value);
-  }
+  }, [])
 
-  const changeIsGameOver = (value) => {
+  const changeIsGameOver = useCallback((value) => {
     setIsGameOver(value);
-  }
+  }, [])
 
-  const handleReplayButton = () => {
+  const handleReplayButton = useCallback(() => {
     setPlayCnt(v => v + 1);
-  }
+  }, [])
 
   useEffect(() => {
     changeIsGameOver(false)
     changeScore(0);
     createList();
-  }, [playCnt])
+  }, [playCnt, createList, changeScore, changeIsGameOver])
 
   return (
     <GameLayout>

@@ -144,6 +144,7 @@ let tbodyRect
 
 let thTimer;
 let count = 0;
+let sizeCount = 0;
 export default function GameTable(props) {
   const { list, score, children, isGameOver, changeScore, changeIsGameOver } = props;
   const [isDrag, setIsDrag] = useState(false);
@@ -153,9 +154,13 @@ export default function GameTable(props) {
 
   }
 
+  // MouseDown, MouseMove 이벤트시 isDrag 변수 설정
+  // 드래그 영역 사이즈, 위치 설정 함수
   const mouseEvent = useCallback((e) => {
+
     if (e.target.className.includes("detection")) {
       if (!isDrag && e._reactName === "onMouseDown") {
+        console.log('isDrag === false Down!!')
         setIsDrag(true);
 
         const el = document.getElementById("tbody-area")
@@ -166,11 +171,14 @@ export default function GameTable(props) {
       }
 
       if (isDrag && e._reactName === "onMouseMove") {
+        console.log('isDrag === true Move!!')
         if (tbodyRect.x > e.clientX || tbodyRect.y > e.clientY) return
 
         count++
-        console.log(count);
+        console.log('count', count);
         throttle(dragComponentRef.current.getAreaSize(), () => {
+          sizeCount++;
+          console.log('sizeCount', sizeCount);
           // console.log(e.clientX);
           // console.log(startClientX);
           const width = e.clientX - startClientX
