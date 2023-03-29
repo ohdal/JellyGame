@@ -103,7 +103,11 @@ const BearList = (props) => {
             mouseEvent(e)
             checkBear("bear-" + idxr + "-" + idxc, "Down")
           }}
-          onMouseUp={() => { checkBear("bear-" + idxr + "-" + idxc, "Up") }}>
+          onMouseUp={(e) => {
+            mouseEvent(e)
+            checkBear("bear-" + idxr + "-" + idxc, "Up")
+          }}
+        >
           <JellyImg alt="jelly" className="no-drag detection" key={"jelly-" + idxc} src={col.src} />
           <JellyNumber className="detection">{col.value}</JellyNumber>
         </td>
@@ -124,15 +128,12 @@ const throttle = (data, fn, delay) => {
   let w = data.width
   let h = data.height
   if (!thTimer) {
-    //    count++
-    //    console.log(count)
     thTimer = setTimeout(() => {
       thTimer = null;
-      const temp = fn()
+      const temp = fn();
 
       if (temp.w !== w && temp.h !== h) {
-        //        console.log('in')
-        fn()
+        fn();
       }
     }, delay)
   }
@@ -146,18 +147,79 @@ let thTimer;
 let count = 0;
 let sizeCount = 0;
 export default function GameTable(props) {
-  const { list, score, children, isGameOver, changeScore, changeIsGameOver } = props;
+  const { list, score, children, isGameOver, changeList, changeScore } = props;
   const [isDrag, setIsDrag] = useState(false);
+  const [startBear, setStartBear] = useState(null);
   const dragComponentRef = useRef();
 
-  const checkBear = () => {
+  const checkBear = useCallback((id, state) => {
+    if (!startBear && state === "Down") {
+      const array = id.split('-');
+      setStartBear(array);
+      dragComponentRef.current.setAreaPos({ x: Number(array[1]), y: Number(array[2]) });
+    } else {
+      console.log('score count start')
+      const offsetX = Math.floor(dragComponentRef.current.getAreaSize().height / 56);
+      const offsetY = Math.floor(dragComponentRef.current.getAreaSize().width / 52);
+      const cn = dragComponentRef.current.getDirection();
+      const { x, y } = dragComponentRef.current.getAreaPos();
 
-  }
+      // debugger;
+
+      // start, end
+      let si, ei, sj, ej;
+      switch (cn) {
+        case "rightBottom":
+          si = x;
+          ei = x + offsetX;
+          sj = y;
+          ej = y + offsetY;
+          break;
+        case "rightTop":
+          si = x - offsetX + 1;
+          ei = x + 1;
+          sj = y;
+          ej = y + offsetY;
+          break;
+        case "leftBottom":
+          si = x;
+          ei = x + offsetX;
+          sj = y - offsetY + 1;
+          ej = y + 1;
+          break;
+        case "leftTop":
+          si = x - offsetX + 1;
+          ei = x + 1;
+          sj = y - offsetY + 1;
+          ej = y + 1;
+          break;
+        default:
+          break;
+      }
+
+      let count = 0;
+      let tempArray = JSON.parse(JSON.stringify(list));
+      for (let i = si; i < ei; i++) {
+        for (let j = sj; j < ej; j++) {
+          if (list[i][j].visible) {
+            count += list[i][j].value;
+            tempArray[i][j].visible = false;
+          }
+        }
+      }
+
+      if (count === 10) {
+        changeScore(v => v + (ei - si) * (ej - sj));
+        changeList(tempArray);
+      }
+
+      setStartBear(null);
+    }
+  }, [list, startBear, score, changeScore, changeList])
 
   // MouseDown, MouseMove 이벤트시 isDrag 변수 설정
-  // 드래그 영역 사이즈, 위치 설정 함수
+  // 드래그 영역 사이즈, 방향 설정 함수
   const mouseEvent = useCallback((e) => {
-
     if (e.target.className.includes("detection")) {
       if (!isDrag && e._reactName === "onMouseDown") {
         console.log('isDrag === false Down!!')
@@ -171,14 +233,14 @@ export default function GameTable(props) {
       }
 
       if (isDrag && e._reactName === "onMouseMove") {
-        console.log('isDrag === true Move!!')
+        // console.log('isDrag === true Move!!')
         if (tbodyRect.x > e.clientX || tbodyRect.y > e.clientY) return
 
         count++
-        console.log('count', count);
+        // console.log('count', count);
         throttle(dragComponentRef.current.getAreaSize(), () => {
           sizeCount++;
-          console.log('sizeCount', sizeCount);
+          // console.log('sizeCount', sizeCount);
           // console.log(e.clientX);
           // console.log(startClientX);
           const width = e.clientX - startClientX
@@ -186,19 +248,19 @@ export default function GameTable(props) {
 
           let computedW, computedH
           if (width >= 0 && height >= 0) {
-            dragComponentRef.current.setDirection("area rightBottom");
+            dragComponentRef.current.setDirection("rightBottom");
             computedW = computedNumber(false, { width })
             computedH = computedNumber(false, { height })
           } else if (width < 0 && height >= 0) {
-            dragComponentRef.current.setDirection("area leftBottom");
+            dragComponentRef.current.setDirection("leftBottom");
             computedW = computedNumber(true, { width })
             computedH = computedNumber(false, { height })
           } else if (width >= 0 && height < 0) {
-            dragComponentRef.current.setDirection("area rightTop");
+            dragComponentRef.current.setDirection("rightTop");
             computedW = computedNumber(false, { width })
             computedH = computedNumber(true, { height })
           } else {
-            dragComponentRef.current.setDirection("area leftTop");
+            dragComponentRef.current.setDirection("leftTop");
             computedW = computedNumber(true, { width })
             computedH = computedNumber(true, { height })
           }
@@ -207,16 +269,20 @@ export default function GameTable(props) {
           dragComponentRef.current.setAreaSize({ w: computedW, h: computedH });
 
           // console.log(dragComponentRef.currnet);
-          return { dir: dragComponentRef.current.getDirection, w: computedW, h: computedH, }
+          return { w: computedW, h: computedH, }
         }, 50)
       }
     }
 
-    // console.log(e.target.className);
     if (e._reactName === "onMouseUp" && isDrag) {
-      setIsDrag(false);
+      noDragState();
     }
   }, [isDrag])
+
+  const noDragState = () => {
+    setIsDrag(false);
+    setStartBear(null);
+  }
 
   return (
     <Wrapper>
@@ -234,10 +300,10 @@ export default function GameTable(props) {
               : <BearList list={list} mouseEvent={mouseEvent} checkBear={checkBear} />}
           </tbody>
         </Table>
-        <NoDragArea className="top" onMouseEnter={() => { setIsDrag(false) }} />
-        <NoDragArea className="left" onMouseEnter={() => { setIsDrag(false) }} />
-        <NoDragArea className="right" onMouseEnter={() => { setIsDrag(false) }} />
-        <NoDragArea className="bottom" onMouseEnter={() => { setIsDrag(false) }} />
+        <NoDragArea className="top" onMouseEnter={() => { noDragState() }} />
+        <NoDragArea className="left" onMouseEnter={() => { noDragState() }} />
+        <NoDragArea className="right" onMouseEnter={() => { noDragState() }} />
+        <NoDragArea className="bottom" onMouseEnter={() => { noDragState() }} />
       </div>
       {children}
     </Wrapper>

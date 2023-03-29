@@ -48,7 +48,7 @@ const jellyList = [jelly1, jelly2, jelly3, jelly4, jelly5, jelly6];
 
 export default function GamePage() {
   const [list, setList] = useState([]);
-  const [score, setScore] = useState(0)
+  const [score, setScore] = useState(0);
   const [isGameOver, setIsGameOver] = useState(false);
   const [playCnt, setPlayCnt] = useState(0);
 
@@ -64,6 +64,10 @@ export default function GamePage() {
     }
 
     setList(temp);
+  }, [])
+
+  const changeList = useCallback((value) => {
+    setList(value);
   }, [])
 
   const changeScore = useCallback((value) => {
@@ -95,8 +99,8 @@ export default function GamePage() {
           list={list}
           scroe={score}
           isGameOver={isGameOver}
+          changeList={changeList}
           changeScore={changeScore}
-          changeIsGameOver={changeIsGameOver}
         >
           <Timer playCnt={playCnt} changeIsGameOver={changeIsGameOver} />
         </GameTable>

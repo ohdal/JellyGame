@@ -17,7 +17,7 @@ const TimerInner = styled.div`
   bottom: 0;
 `;
 
-const TIME_VALUE = 5;
+const TIME_VALUE = 150;
 let time = TIME_VALUE;
 let intervalId = null;
 const Timer = (props) => {
@@ -27,7 +27,6 @@ const Timer = (props) => {
   const timerDiv = useRef();
 
   useEffect(() => {
-    console.log('in');
     time = TIME_VALUE;
 
     if (intervalId) {
