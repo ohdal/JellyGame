@@ -246,6 +246,7 @@ export default function GameTable(props) {
           const width = e.clientX - startClientX
           const height = e.clientY - startClientY
 
+          
           let computedW, computedH
           if (width >= 0 && height >= 0) {
             dragComponentRef.current.setDirection("rightBottom");

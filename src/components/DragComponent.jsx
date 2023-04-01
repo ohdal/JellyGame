@@ -8,26 +8,28 @@ const Wrapper = styled.div`
   border: 1px solid #61dafb;
   background: #66a7ba;
   z-index: 1;
+  top: 13px;
+  left: 13px;
 
-  &.rightBottom {
-    top: 13px;
-    left: 13px;
-  }
+  // &.rightBottom {
+  //   top: 13px;
+  //   left: 13px;
+  // }
 
-  &.rightTop {
-    bottom: 13px;
-    left: 13px;
-  }
+  // &.rightTop {
+  //   bottom: 13px;
+  //   left: 13px;
+  // }
 
-  &.leftBottom {
-    top: 13px;
-    right: 13px;
-  }
+  // &.leftBottom {
+  //   top: 13px;
+  //   right: 13px;
+  // }
 
-  &.leftTop {
-    bottom: 13px;
-    right: 13px;
-  }
+  // &.leftTop {
+  //   bottom: 13px;
+  //   right: 13px;
+  // }
 `;
 
 const DragComponent = forwardRef((props, ref) => {
@@ -87,8 +89,27 @@ const DragComponent = forwardRef((props, ref) => {
     // table border-spacing => 2px
     const xDif = 2 * yPos;
     const yDif = 2 * xPos;
-    return `translate(${yPos * 52 + xDif}px, ${xPos * 56 + yDif}px)`;
-  }, [xPos, yPos, dir])
+    let resultX = yPos * 52 + xDif, resultY = xPos * 56 + yDif;
+
+    let { width, height } = getAreaSize();
+
+    switch (dir) {
+      case "rightTop":
+        resultY -= (height - 56);
+        break;
+      case "leftBottom":
+        resultX -= (width - 52);
+        break;
+      case "leftTop":
+        resultX -= (width - 52);
+        resultY -= (height - 56);
+        break;
+      default:
+        break;
+    }
+
+    return `translate(${resultX}px, ${resultY}px)`;
+  }, [xPos, yPos, dir, getAreaSize])
 
   useEffect(() => {
     if (!isDrag) {
@@ -101,7 +122,7 @@ const DragComponent = forwardRef((props, ref) => {
     <Wrapper
       className={dir}
       style={{
-        opacity: isDrag ? 0.5 : 0.2,
+        opacity: isDrag ? 0.5 : 0,
         width: `${width}px`,
         height: `${height}px`,
         transform: computedPos(),
