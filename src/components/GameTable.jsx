@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef, } from 'react'
+import React, { useState, useCallback, useRef, } from 'react'
 import styled from 'styled-components';
 
 import DragComponent from './DragComponent';
@@ -215,7 +215,7 @@ export default function GameTable(props) {
 
       setStartBear(null);
     }
-  }, [list, startBear, score, changeScore, changeList])
+  }, [list, startBear, changeScore, changeList])
 
   // MouseDown, MouseMove 이벤트시 isDrag 변수 설정
   // 드래그 영역 사이즈, 방향 설정 함수
