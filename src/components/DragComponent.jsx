@@ -10,30 +10,10 @@ const Wrapper = styled.div`
   z-index: 1;
   top: 13px;
   left: 13px;
-
-  // &.rightBottom {
-  //   top: 13px;
-  //   left: 13px;
-  // }
-
-  // &.rightTop {
-  //   bottom: 13px;
-  //   left: 13px;
-  // }
-
-  // &.leftBottom {
-  //   top: 13px;
-  //   right: 13px;
-  // }
-
-  // &.leftTop {
-  //   bottom: 13px;
-  //   right: 13px;
-  // }
 `;
 
 const DragComponent = forwardRef((props, ref) => {
-  const { isDrag } = props;
+  const { isDrag, mouseEvent, checkBear } = props;
 
   const [dir, setDir] = useState("rightBottom");
   const [width, setWidth] = useState(52);
@@ -50,9 +30,9 @@ const DragComponent = forwardRef((props, ref) => {
     setAreaPos,
   }))
 
-  const getAreaSize = () => {
+  const getAreaSize = useCallback(() => {
     return { width, height };
-  }
+  }, [width, height])
 
   const setAreaSize = useCallback(({ h, w }) => {
     // 한번더 isDrag 체크
@@ -67,20 +47,20 @@ const DragComponent = forwardRef((props, ref) => {
     }
   }, [isDrag])
 
-  const getDirection = () => {
+  const getDirection = useCallback(() => {
     return dir;
-  }
+  }, [dir])
 
   const setDirection = (str) => {
     setDir(str);
   }
 
-  const getAreaPos = () => {
+  const getAreaPos = useCallback(() => {
     return { x: xPos, y: yPos };
-  }
+  }, [xPos, yPos])
 
   const setAreaPos = ({ x, y }) => {
-    console.log('Pos', x, y)
+    // console.log('Pos', x, y)
     setXPos(x);
     setYPos(y);
   }
@@ -116,7 +96,7 @@ const DragComponent = forwardRef((props, ref) => {
       setAreaSize({ h: 56, w: 52 });
       setAreaPos({ x: -1, y: -1 });
     }
-  }, [isDrag])
+  }, [isDrag, setAreaSize])
 
   return (
     <Wrapper
@@ -126,6 +106,10 @@ const DragComponent = forwardRef((props, ref) => {
         width: `${width}px`,
         height: `${height}px`,
         transform: computedPos(),
+      }}
+      onMouseUp={(e) => {
+        mouseEvent(e)
+        checkBear(null, "Up")
       }}
     />
   )

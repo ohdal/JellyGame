@@ -52,7 +52,7 @@ const JellyNumber = styled.p`
   top: 25%;
   left: 50%;
   transform: translate(-50%, -50%);
-  z-index: 2;
+  z-index: 1;
   text-align: center;
   font-weight: bold;
   color: #616161;
@@ -105,7 +105,7 @@ const BearList = (props) => {
           }}
           onMouseUp={(e) => {
             mouseEvent(e)
-            checkBear("bear-" + idxr + "-" + idxc, "Up")
+            checkBear(null, "Up")
           }}
         >
           <JellyImg alt="jelly" className="no-drag detection" key={"jelly-" + idxc} src={col.src} />
@@ -246,7 +246,7 @@ export default function GameTable(props) {
           const width = e.clientX - startClientX
           const height = e.clientY - startClientY
 
-          
+
           let computedW, computedH
           if (width >= 0 && height >= 0) {
             dragComponentRef.current.setDirection("rightBottom");
@@ -288,7 +288,8 @@ export default function GameTable(props) {
   return (
     <Wrapper>
       <div className="no-drag">
-        <DragComponent className="rightBottom" isDrag={isDrag} ref={dragComponentRef} />
+        <DragComponent className="rightBottom" isDrag={isDrag} ref={dragComponentRef}
+          mouseEvent={mouseEvent} checkBear={checkBear} />
         <Table>
           <tbody id="tbody-area" onMouseMove={mouseEvent} onMouseUp={mouseEvent}>
             {isGameOver ?
