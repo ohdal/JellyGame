@@ -1,8 +1,11 @@
-import React, { useState, useCallback, useRef, } from 'react'
+import React, { useEffect, useState, useCallback, useRef, } from 'react'
 import styled from 'styled-components';
 
 import DragComponent from './DragComponent';
 import game_over from '../assets/images/gameover.png'
+import particle from '../assets/images/particle.gif'
+
+import effect_mouse from '../assets/media/effect_mouseup.mp3'
 
 const Wrapper = styled.div`
   min-height: 600px;
@@ -37,6 +40,14 @@ const Table = styled.table`
     position: relative;
   }
 `;
+
+const ParticleImg = styled.img`
+  width: 52px;
+  height: 56px;
+  position: absolute;
+  top: 0;
+  left: 0;
+`
 
 const JellyImg = styled.img`
   width: 50px;
@@ -91,25 +102,30 @@ const NoDragArea = styled.div`
   }
 `;
 
+const effectAudio = new Audio(effect_mouse);
 const BearList = (props) => {
-  const { list, mouseEvent, checkBear } = props;
+  const { list, mouseEvent, checkBear, particleHidden } = props;
 
   return list.map((row, idxr) => {
     return <tr key={"row-" + idxr}>{
       row.map((col, idxc) => {
         return <td key={"col-" + idxc} id={"bear-" + idxr + "-" + idxc}
-          style={{ 'visibility': col.visible ? 'visible' : 'hidden' }}
           onMouseDown={(e) => {
             mouseEvent(e)
-            checkBear("bear-" + idxr + "-" + idxc, "Down")
+            checkBear("bear-" + idxr + "-" + idxc, "Down");
           }}
           onMouseUp={(e) => {
-            mouseEvent(e)
-            checkBear(null, "Up")
+            mouseEvent(e);
+            checkBear(null, "Up");
           }}
         >
-          <JellyImg alt="jelly" className="no-drag detection" key={"jelly-" + idxc} src={col.src} />
-          <JellyNumber className="detection">{col.value}</JellyNumber>
+          {!col.visible && particleHidden(idxr, idxc)}
+          <JellyImg
+            style={{ 'visibility': col.visible ? 'visible' : 'hidden' }}
+            alt="jelly" className="no-drag detection" key={"jelly-" + idxc} src={col.src} />
+          <JellyNumber
+            style={{ 'visibility': col.visible ? 'visible' : 'hidden' }}
+            className="detection">{col.value}</JellyNumber>
         </td>
       })
     }</tr>;
@@ -152,12 +168,27 @@ export default function GameTable(props) {
   const [startBear, setStartBear] = useState(null);
   const dragComponentRef = useRef();
 
+  const particleHidden = useCallback((r, c) => {
+    setTimeout(() => {
+      const el = document.getElementById('particle-' + r + '-' + c);
+      el.style.visibility = 'hidden';
+    }, 500)
+
+    return <ParticleImg alt="particle" id={'particle-' + r + '-' + c} src={particle} />
+  }, []);
+
   const checkBear = useCallback((id, state) => {
+
     if (!startBear && state === "Down") {
       const array = id.split('-');
       setStartBear(array);
       dragComponentRef.current.setAreaPos({ x: Number(array[1]), y: Number(array[2]) });
     } else {
+      if (!isDrag) {
+        setStartBear(null);
+        return;
+      }
+
       console.log('score count start')
       const offsetX = Math.floor(dragComponentRef.current.getAreaSize().height / 56);
       const offsetY = Math.floor(dragComponentRef.current.getAreaSize().width / 52);
@@ -211,11 +242,12 @@ export default function GameTable(props) {
       if (count === 10) {
         changeScore(v => v + (ei - si) * (ej - sj));
         changeList(tempArray);
+        effectAudio.play();
       }
 
       setStartBear(null);
     }
-  }, [list, startBear, changeScore, changeList])
+  }, [isDrag, list, startBear, changeScore, changeList])
 
   // MouseDown, MouseMove 이벤트시 isDrag 변수 설정
   // 드래그 영역 사이즈, 방향 설정 함수
@@ -285,6 +317,10 @@ export default function GameTable(props) {
     setStartBear(null);
   }
 
+  useEffect(() => {
+    effectAudio.volume = 0.5;
+  }, [])
+
   return (
     <Wrapper>
       <div className="no-drag">
@@ -299,7 +335,7 @@ export default function GameTable(props) {
                   <div className="gameover-text"><p>{score}</p></div>
                 </td>
               </tr>
-              : <BearList list={list} mouseEvent={mouseEvent} checkBear={checkBear} />}
+              : <BearList list={list} mouseEvent={mouseEvent} checkBear={checkBear} particleHidden={particleHidden} />}
           </tbody>
         </Table>
         <NoDragArea className="top" onMouseEnter={() => { noDragState() }} />

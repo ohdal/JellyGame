@@ -108,8 +108,8 @@ const DragComponent = forwardRef((props, ref) => {
         transform: computedPos(),
       }}
       onMouseUp={(e) => {
-        mouseEvent(e)
-        checkBear(null, "Up")
+        mouseEvent(e);
+        checkBear(null, "Up");
       }}
     />
   )

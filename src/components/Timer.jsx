@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components';
 
+import music_background from '../assets/media/music_background.mp3'
+
 const Wrapper = styled.div`
   position: relative;
   width: 30px;
@@ -18,10 +20,14 @@ const TimerInner = styled.div`
 `;
 
 const TIME_VALUE = 150;
+const musicAudio = new Audio(music_background);
 let time = TIME_VALUE;
 let intervalId = null;
+
+musicAudio.loop = true;
+musicAudio.volume = 0.2;
 const Timer = (props) => {
-  const { playCnt, changeIsGameOver } = props;
+  const { playCnt, changeIsGameOver, } = props;
   const [timerHeight, setTimerHeight] = useState(null);
 
   const timerDiv = useRef();
@@ -31,22 +37,43 @@ const Timer = (props) => {
 
     if (intervalId) {
       clearInterval(intervalId);
-    } else {
-      const height = timerDiv.current.clientHeight;
-      const value = height / time;
-      setTimerHeight(height);
-
-      intervalId = setInterval(() => {
-        time--;
-        setTimerHeight(value * time);
-        if (time === 0) {
-          clearInterval(intervalId);
-          intervalId = null;
-          changeIsGameOver(true);
-        }
-      }, 1000)
+      musicAudio.pause();
+      musicAudio.playbackRate = 1.0;
+      musicAudio.currentTime = 0;
     }
+
+    musicAudio.play();
+    const height = timerDiv.current.clientHeight;
+    const value = height / time;
+    setTimerHeight(height);
+
+    intervalId = setInterval(() => {
+      time--;
+      setTimerHeight(value * time);
+      if (time === 0) {
+        clearInterval(intervalId);
+        intervalId = null;
+        changeIsGameOver(true);
+
+        musicAudio.pause();
+        musicAudio.playbackRate = 1.0;
+      } else if (time === 60) {
+        musicAudio.playbackRate = 1.25;
+      } else if (time === 30) {
+        musicAudio.playbackRate = 1.5;
+      }
+    }, 1000)
+
   }, [playCnt, changeIsGameOver])
+
+
+  useEffect(() => {
+    musicAudio.play();
+
+    return () => {
+      musicAudio.pause();
+    }
+  }, [])
 
   return (
     <Wrapper ref={timerDiv}>
