@@ -26,6 +26,13 @@ let intervalId = null;
 
 musicAudio.loop = true;
 musicAudio.volume = 0.2;
+
+const resetMusic = () => {
+  musicAudio.pause();
+  musicAudio.playbackRate = 1.0;
+  musicAudio.currentTime = 0;
+}
+
 const Timer = (props) => {
   const { playCnt, changeIsGameOver, } = props;
   const [timerHeight, setTimerHeight] = useState(null);
@@ -37,9 +44,7 @@ const Timer = (props) => {
 
     if (intervalId) {
       clearInterval(intervalId);
-      musicAudio.pause();
-      musicAudio.playbackRate = 1.0;
-      musicAudio.currentTime = 0;
+      resetMusic();
     }
 
     musicAudio.play();
@@ -54,9 +59,7 @@ const Timer = (props) => {
         clearInterval(intervalId);
         intervalId = null;
         changeIsGameOver(true);
-
-        musicAudio.pause();
-        musicAudio.playbackRate = 1.0;
+        resetMusic();
       } else if (time === 60) {
         musicAudio.playbackRate = 1.25;
       } else if (time === 30) {
@@ -64,16 +67,10 @@ const Timer = (props) => {
       }
     }, 1000)
 
-  }, [playCnt, changeIsGameOver])
-
-
-  useEffect(() => {
-    musicAudio.play();
-
     return () => {
-      musicAudio.pause();
+      resetMusic();
     }
-  }, [])
+  }, [playCnt, changeIsGameOver])
 
   return (
     <Wrapper ref={timerDiv}>
@@ -82,4 +79,4 @@ const Timer = (props) => {
   )
 }
 
-export default React.memo(Timer);
+export default Timer;
