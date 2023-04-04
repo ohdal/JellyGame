@@ -7,12 +7,11 @@ function App() {
   return (
     <div className="App">
       <Switch>
-        <Route exact path="/play">
-          <GamePage />
-          {/* <JellyGame /> */}
-        </Route>
-        <Route path="/">
+        <Route exact path="/">
           <MainPage />
+        </Route>
+        <Route path="/play">
+          <GamePage />
         </Route>
       </Switch>
     </div>
