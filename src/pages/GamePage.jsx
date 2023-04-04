@@ -12,8 +12,6 @@ import jelly3 from '../assets/images/jelly_type_3.png'
 import jelly4 from '../assets/images/jelly_type_4.png'
 import jelly5 from '../assets/images/jelly_type_5.png'
 import jelly6 from '../assets/images/jelly_type_6.png'
-import particle from '../assets/images/particle.gif'
-import particle2 from '../assets/images/particle2.gif'
 
 const GameLayout = styled.div`
   width: 100%;
@@ -65,7 +63,6 @@ export default function GamePage() {
           visible: true,
           value: getRandomInt(1, 10),
           src: jellyList[getRandomInt(0, jellyList.length)],
-          particle, particle2
         })
       }
     }
