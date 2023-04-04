@@ -31,7 +31,7 @@ const Wrapper = styled.div`
 const Table = styled.table`
   width: 838px;
   height: 608px;
-  background: #282c34;
+  background: #171a1e;
   border: 3px solid #66a7ba;
   border-radius: 10px;
   padding: 10px;
@@ -104,22 +104,24 @@ const NoDragArea = styled.div`
 
 const effectAudio = new Audio(effect_mouse);
 const BearList = (props) => {
-  const { list, mouseEvent, checkBear, particleHidden } = props;
+  const { list, mouseEvent, checkBear, particleGenerate } = props;
 
   return list.map((row, idxr) => {
+    // idxr : idx + row
+    // idxc : idx + col
     return <tr key={"row-" + idxr}>{
       row.map((col, idxc) => {
         return <td key={"col-" + idxc} id={"bear-" + idxr + "-" + idxc}
           onMouseDown={(e) => {
-            mouseEvent(e)
-            checkBear("bear-" + idxr + "-" + idxc, "Down");
+            mouseEvent(e, true)
+            checkBear(idxr, idxc, "Down");
           }}
           onMouseUp={(e) => {
             mouseEvent(e);
-            checkBear(null, "Up");
+            checkBear(null, null, "Up");
           }}
         >
-          {!col.visible && particleHidden(idxr, idxc)}
+          {!col.visible && particleGenerate(idxr, idxc)}
           <JellyImg
             style={{ 'visibility': col.visible ? 'visible' : 'hidden' }}
             alt="jelly" className="no-drag detection" key={"jelly-" + idxc} src={col.src} />
@@ -168,34 +170,34 @@ export default function GameTable(props) {
   const [startBear, setStartBear] = useState(null);
   const dragComponentRef = useRef();
 
-  const particleHidden = useCallback((r, c) => {
+  const particleGenerate = useCallback((r, c) => {
     setTimeout(() => {
       const el = document.getElementById('particle-' + r + '-' + c);
-      el.style.visibility = 'hidden';
+      if (el) el.style.visibility = 'hidden';
     }, 500)
 
     return <ParticleImg alt="particle" id={'particle-' + r + '-' + c} src={particle} />
   }, []);
 
-  const checkBear = useCallback((id, state) => {
 
+  const noDragState = useCallback(() => {
+    setIsDrag(false);
+    setStartBear(null);
+  }, [])
+
+  // Mouse 이벤트 발생 시 처리 - 게임 점수 관련
+  // Down: 클릭 시작점 td태그 id를 통해 x,y 위치 가져오기 (2차원배열 인덱스 값)
+  // Up: DragComponent.jsx의 width, height 값을 통해 for문 돌릴 2차원배열 시작좌표, 끝좌표를 잡기 및 점수 계산하기
+  const checkBear = useCallback((row, col, state) => {
     if (!startBear && state === "Down") {
-      const array = id.split('-');
-      setStartBear(array);
-      dragComponentRef.current.setAreaPos({ x: Number(array[1]), y: Number(array[2]) });
-    } else {
-      if (!isDrag) {
-        setStartBear(null);
-        return;
-      }
-
+      setStartBear(true);
+      dragComponentRef.current.setAreaPos({ x: row, y: col });
+    } else if (startBear) {
       console.log('score count start')
       const offsetX = Math.floor(dragComponentRef.current.getAreaSize().height / 56);
       const offsetY = Math.floor(dragComponentRef.current.getAreaSize().width / 52);
       const cn = dragComponentRef.current.getDirection();
       const { x, y } = dragComponentRef.current.getAreaPos();
-
-      // debugger;
 
       // start, end
       let si, ei, sj, ej;
@@ -249,23 +251,35 @@ export default function GameTable(props) {
     }
   }, [isDrag, list, startBear, changeScore, changeList])
 
-  // MouseDown, MouseMove 이벤트시 isDrag 변수 설정
-  // 드래그 영역 사이즈, 방향 설정 함수
-  const mouseEvent = useCallback((e) => {
-    if (e.target.className.includes("detection")) {
+  // Mouse 관련 이벤트 발생 시 처리 - 드래그 관련
+  // Down: isDrag 변수 설정 (true), 마우스 클릭시의 최초 위치 값 저장
+  // Move: 클릭시 저장된 최초 위치 값과 계속 바뀌는 사용자 위치 값 파악 후, 드래그 영역 방향 설정
+  // Up: isDrag 변수 설정 (false)
+  const mouseEvent = useCallback((e, isTdTag = false) => {
+
+    // isTdTag 확인 이유 ?
+    // <td />에 className으로 detection을 주게 되면 <tbody /> MouseMove이벤트 발생시에
+    // 마우스가 Bear이미지 이외의 빈공간에 위치해도 Move 이벤트가 쓸데없이 발생하기 떄문에
+    // detection className을 주지 않는다.
+
+    // 하지만 <td />에 달린 MouseDown 이벤트 발생시 위에서 설명한 빈공간을 클릭한 경우
+    // e.target으로 detection className이 추가되지 않은 <td />가 들어오면서
+    // 아래 조건문에 걸리게 되고 isDrag는 false 상태이면서 checkBear 함수가 실행되서 오류가 나게 된다.
+    // 따라서 detection className 조건 또는 <td /> 인지 확인하는 조건을 추가해주어 처리해준다.
+
+    if (e.target.className.includes("detection") || isTdTag) {
       if (!isDrag && e._reactName === "onMouseDown") {
-        console.log('isDrag === false Down!!')
         setIsDrag(true);
 
         const el = document.getElementById("tbody-area")
         tbodyRect = el.getClientRects()[0]
 
-        startClientX = e.target.parentNode.getClientRects()[0].x
-        startClientY = e.target.parentNode.getClientRects()[0].y
+        // v === true : e.target이 td 태그인 경우
+        startClientX = isTdTag ? e.target.getClientRects()[0].x : e.target.parentNode.getClientRects()[0].x
+        startClientY = isTdTag ? e.target.getClientRects()[0].y : e.target.parentNode.getClientRects()[0].y
       }
 
       if (isDrag && e._reactName === "onMouseMove") {
-        // console.log('isDrag === true Move!!')
         if (tbodyRect.x > e.clientX || tbodyRect.y > e.clientY) return
 
         count++
@@ -310,12 +324,12 @@ export default function GameTable(props) {
     if (e._reactName === "onMouseUp" && isDrag) {
       noDragState();
     }
-  }, [isDrag])
+  }, [isDrag, noDragState])
 
-  const noDragState = () => {
-    setIsDrag(false);
-    setStartBear(null);
-  }
+  useEffect(() => {
+    if (isGameOver) noDragState();
+
+  }, [isGameOver, noDragState])
 
   useEffect(() => {
     effectAudio.volume = 0.5;
@@ -335,7 +349,7 @@ export default function GameTable(props) {
                   <div className="gameover-text"><p>{score}</p></div>
                 </td>
               </tr>
-              : <BearList list={list} mouseEvent={mouseEvent} checkBear={checkBear} particleHidden={particleHidden} />}
+              : <BearList list={list} mouseEvent={mouseEvent} checkBear={checkBear} particleGenerate={particleGenerate} />}
           </tbody>
         </Table>
         <NoDragArea className="top" onMouseEnter={() => { noDragState() }} />
