@@ -66,8 +66,10 @@ const Timer = (props) => {
         musicAudio.playbackRate = 1.5;
       }
     }, 1000)
-
+    
     return () => {
+      clearInterval(intervalId);
+      intervalId = null;
       resetMusic();
     }
   }, [playCnt, changeIsGameOver])
