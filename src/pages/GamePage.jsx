@@ -87,7 +87,7 @@ export default function GamePage() {
   }, [])
 
   useEffect(() => {
-    changeIsGameOver(false)
+    changeIsGameOver(false);
     changeScore(0);
     createList();
   }, [playCnt, createList, changeScore, changeIsGameOver])
