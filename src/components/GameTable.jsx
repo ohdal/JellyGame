@@ -113,6 +113,7 @@ const BearList = (props) => {
       row.map((col, idxc) => {
         return <td key={"col-" + idxc} id={"bear-" + idxr + "-" + idxc}
           onMouseDown={(e) => {
+            if (!col.visible) return;
             mouseEvent(e, true)
             checkBear(idxr, idxc, "Down");
           }}
@@ -181,9 +182,11 @@ export default function GameTable(props) {
 
 
   const noDragState = useCallback(() => {
-    setIsDrag(false);
-    setStartBear(null);
-  }, [])
+    if (isDrag) {
+      setIsDrag(false);
+      setStartBear(null);
+    }
+  }, [isDrag])
 
   // Mouse 이벤트 발생 시 처리 - 게임 점수 관련
   // Down: 클릭 시작점 td태그 id를 통해 x,y 위치 가져오기 (2차원배열 인덱스 값)
@@ -280,7 +283,7 @@ export default function GameTable(props) {
       }
 
       if (isDrag && e._reactName === "onMouseMove") {
-        if (tbodyRect.x > e.clientX || tbodyRect.y > e.clientY) return
+        if (tbodyRect.x > e.clientX || tbodyRect.y > e.clientY) return;
 
         count++
         // console.log('count', count);
@@ -345,8 +348,12 @@ export default function GameTable(props) {
             {isGameOver ?
               <tr>
                 <td className="gameover-layout">
-                  <div className="gameover-img"><img alt="" src={game_over} /></div>
-                  <div className="gameover-text"><p>{score}</p></div>
+                  <div className="gameover-img">
+                    <img alt="" src={game_over} />
+                  </div>
+                  <div className="gameover-text">
+                    <p>{score}</p>
+                  </div>
                 </td>
               </tr>
               : <BearList list={list} mouseEvent={mouseEvent} checkBear={checkBear} particleGenerate={particleGenerate} />}

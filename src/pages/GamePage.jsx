@@ -101,7 +101,7 @@ export default function GamePage() {
         </Toolbar>
         <GameTable
           list={list}
-          scroe={score}
+          score={score}
           isGameOver={isGameOver}
           changeList={changeList}
           changeScore={changeScore}
