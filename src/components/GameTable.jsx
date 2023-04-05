@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useCallback, useRef, } from 'react'
 import styled from 'styled-components';
 
+import GameOverBox from './GameOverBox';
 import DragComponent from './DragComponent';
-import game_over from '../assets/images/gameover.png'
 import particle from '../assets/images/particle.gif'
 
 import effect_mouse from '../assets/media/effect_mouseup.mp3'
+import pointer_img from '../assets/images/pointer.png'
 
 const Wrapper = styled.div`
   min-height: 600px;
@@ -52,6 +53,7 @@ const ParticleImg = styled.img`
 const JellyImg = styled.img`
   width: 50px;
   height: 50px;
+  cursor: url(${props => props.pointer}), auto !important;
 `;
 
 const JellyNumber = styled.p`
@@ -67,6 +69,7 @@ const JellyNumber = styled.p`
   text-align: center;
   font-weight: bold;
   color: #616161;
+  cursor: url(${props => props.pointer}), auto !important;
 `;
 
 const NoDragArea = styled.div`
@@ -125,10 +128,13 @@ const BearList = (props) => {
           {!col.visible && particleGenerate(idxr, idxc)}
           <JellyImg
             style={{ 'visibility': col.visible ? 'visible' : 'hidden' }}
-            alt="jelly" className="no-drag detection" key={"jelly-" + idxc} src={col.src} />
+            alt="jelly" className="no-drag detection" pointer={pointer_img}
+            key={"jelly-" + idxc} src={col.src} />
           <JellyNumber
             style={{ 'visibility': col.visible ? 'visible' : 'hidden' }}
-            className="detection">{col.value}</JellyNumber>
+            className="detection" pointer={pointer_img}>
+            {col.value}
+          </JellyNumber>
         </td>
       })
     }</tr>;
@@ -346,17 +352,9 @@ export default function GameTable(props) {
         <Table>
           <tbody id="tbody-area" onMouseMove={mouseEvent} onMouseUp={mouseEvent}>
             {isGameOver ?
-              <tr>
-                <td className="gameover-layout">
-                  <div className="gameover-img">
-                    <img alt="" src={game_over} />
-                  </div>
-                  <div className="gameover-text">
-                    <p>{score}</p>
-                  </div>
-                </td>
-              </tr>
-              : <BearList list={list} mouseEvent={mouseEvent} checkBear={checkBear} particleGenerate={particleGenerate} />}
+              <GameOverBox><p>{"Score: " + score}</p></GameOverBox>
+              :
+              <BearList list={list} mouseEvent={mouseEvent} checkBear={checkBear} particleGenerate={particleGenerate} />}
           </tbody>
         </Table>
         <NoDragArea className="top" onMouseEnter={() => { noDragState() }} />

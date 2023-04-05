@@ -5,7 +5,7 @@ body,
   height: 100%;
   cursor: url("./assets/images/cursor.png"), auto;
 
-  a {
+  a, button {
     cursor: url("./assets/images/pointer.png"), auto !important;
   }
 }
