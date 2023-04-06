@@ -69,39 +69,6 @@ const JellyNumber = styled.p`
   color: #616161;
 `;
 
-const NoDragArea = styled.div`
-  position: absolute;
-  z-index: -1;
-
-  &.top {
-    width: calc(100% + 110px);
-    height: 100px;
-    top: -100px;
-    left: -55px;
-  }
-
-  &.left {
-    width: 100px;
-    height: 100%;
-    top: 0;
-    left: -100px;
-  }
-
-  &.right {
-    width: 100px;
-    height: 100%;
-    top: 0;
-    right: -100px;
-  }
-
-  &.bottom {
-    width: calc(100% + 110px);
-    height: 100px;
-    bottom: -100px;
-    left: -55px;
-  }
-`;
-
 const effectAudio = new Audio(effect_mouse);
 const BearList = (props) => {
   const { list, mouseEvent, checkBear, particleGenerate } = props;
@@ -327,9 +294,14 @@ export default function GameTable(props) {
       }
     }
 
+
     if (e._reactName === "onMouseUp" && isDrag) {
       noDragState();
     }
+    if (e._reactName === "onMouseLeave" && isDrag && e.target.tagName === "TABLE") {
+      noDragState();
+    }
+
   }, [isDrag, noDragState])
 
   useEffect(() => {
@@ -346,7 +318,7 @@ export default function GameTable(props) {
       <div className="no-drag">
         <DragComponent className="rightBottom" isDrag={isDrag} ref={dragComponentRef}
           mouseEvent={mouseEvent} checkBear={checkBear} />
-        <Table>
+        <Table onMouseLeave={mouseEvent}>
           <tbody id="tbody-area" onMouseMove={mouseEvent} onMouseUp={mouseEvent}>
             {isGameOver ?
               <GameOverBox><p>{"Score: " + score}</p></GameOverBox>
@@ -354,10 +326,6 @@ export default function GameTable(props) {
               <BearList list={list} mouseEvent={mouseEvent} checkBear={checkBear} particleGenerate={particleGenerate} />}
           </tbody>
         </Table>
-        <NoDragArea className="top" onMouseEnter={() => { noDragState() }} />
-        <NoDragArea className="left" onMouseEnter={() => { noDragState() }} />
-        <NoDragArea className="right" onMouseEnter={() => { noDragState() }} />
-        <NoDragArea className="bottom" onMouseEnter={() => { noDragState() }} />
       </div>
       {children}
     </Wrapper>
