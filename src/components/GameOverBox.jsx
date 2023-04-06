@@ -43,7 +43,7 @@ const GameOverImg = styled.div`
 `
 
 const effectAudio = new Audio(effect_gameover);
-export default function GameOverBox({ children }) {
+export default function GameOverBox() {
 
   useEffect(() => {
     effectAudio.volume = 0.5;

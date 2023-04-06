@@ -3,10 +3,14 @@ body,
 #root {
   width: 100%;
   height: 100%;
-  cursor: url("./assets/images/cursor.png"), auto;
+  cursor: url("./assets/images/cursor.png"), auto !important;
 
   a,
   button {
+    cursor: url("./assets/images/pointer.png"), auto !important;
+  }
+
+  .pointer {
     cursor: url("./assets/images/pointer.png"), auto !important;
   }
 
@@ -18,6 +22,7 @@ body,
     background: linear-gradient(to right, #66a7ba 0%, #66a7ba 50%, #171a1e 50%, #171a1e 100%);
     outline: none;
     transition: background 50ms ease-in;
+    cursor: url("./assets/images/cursor.png"), auto !important;
   }
 
   input[type="range"]::-webkit-slider-thumb {
@@ -27,8 +32,8 @@ body,
     border: 2px solid #548999;
     border-radius: 50%;
     background: #66a7ba;
-    cursor: pointer;
     transition: background .3s ease-in-out;
+    cursor: url("./assets/images/pointer.png"), auto !important;
   }
 }
 

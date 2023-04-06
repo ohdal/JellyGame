@@ -82,6 +82,7 @@ const musicAudio = new Audio(music_background);
 musicAudio.loop = true;
 musicAudio.volume = DEFAULT_VOLUME;
 effectAudio.volume = DEFAULT_VOLUME * 1.5;
+
 const resetMusic = () => {
   musicAudio.pause();
   musicAudio.playbackRate = 1.0;
@@ -90,6 +91,12 @@ const resetMusic = () => {
 
 const changeMusicRate = (v) => {
   musicAudio.playbackRate = v;
+}
+
+const changeVolume = (v) => {
+  const effectVolume = v * 1.5;
+  effectAudio.volume = effectVolume > 1 ? 1 : effectVolume;
+  musicAudio.volume = v;
 }
 
 export default function GamePage() {
@@ -127,12 +134,6 @@ export default function GamePage() {
 
   const changeIsGameOver = useCallback((value) => {
     setIsGameOver(value);
-  }, [])
-
-  const changeVolume = useCallback((v) => {
-    const effectVolume = v * 1.5;
-    effectAudio.volume = effectVolume > 1 ? 1 : effectVolume;
-    musicAudio.volume = v;
   }, [])
 
   const handleHomeButton = useCallback(() => {

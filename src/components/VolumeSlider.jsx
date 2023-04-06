@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 import icon_volume from '../assets/images/volume.png'
 import icon_volume_zero from '../assets/images/volume_zero.png'
+import cursor_pointer from '../assets/images/pointer.png'
 
 const Wrapper = styled.div`
   button {
@@ -13,10 +14,6 @@ const Wrapper = styled.div`
     outline: none;
     padding: 0;
     transform: translate(0, 10px);
-
-    img {
-      pointer: cursor;
-    }
   }
 
   input[type="range"] {
@@ -33,10 +30,10 @@ export default function VolumeSlider({ defaultVolume, changeVolume }) {
   }, [changeVolume])
 
   return (
-    <Wrapper per={value}>
-      <button onClick={() => { handleOnChange(!value ? 100 : 0) }}>
-        <img alt="volume" src={value > 0 ? icon_volume : icon_volume_zero}
-          width="30px" height="30px" />
+    <Wrapper per={value} pointer={cursor_pointer}>
+      <button onClick={() => { handleOnChange(!value ? 40 : 0) }}>
+        <img alt="volume" className="pointer"
+          width="30px" height="30px" src={value > 0 ? icon_volume : icon_volume_zero} />
       </button>
       <input type="range" min={0} max={100} value={value}
         onChange={(e) => { handleOnChange(e.target.value); }} />
