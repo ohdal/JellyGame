@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 
 import game_over_bg from '../assets/images/gameover_BG.png'
@@ -41,11 +41,6 @@ const GameOverImg = styled.div`
     }
   }
 `
-const GameOverText = styled.div`
-  font-size: 30px;
-  font-weight: bold;
-  color: #66a7ba;
-`
 
 const effectAudio = new Audio(effect_gameover);
 export default function GameOverBox({ children }) {
@@ -61,9 +56,6 @@ export default function GameOverBox({ children }) {
         <GameOverImg src={game_over_bg}>
           <img alt="" src={game_over} />
         </GameOverImg>
-        {/* <GameOverText>
-          {children}
-        </GameOverText> */}
       </td>
     </tr>
   )
