@@ -1,8 +1,9 @@
 import React, { useEffect, useCallback, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 import ScoreBox from '../components/ScoreBox'
-import ReplayButton from '../components/ReplayButton'
+import CustomButton from '../components/CustomButton'
 import GameTable from '../components/GameTable'
 import Timer from '../components/Timer'
 
@@ -12,6 +13,10 @@ import jelly3 from '../assets/images/jelly_type_3.png'
 import jelly4 from '../assets/images/jelly_type_4.png'
 import jelly5 from '../assets/images/jelly_type_5.png'
 import jelly6 from '../assets/images/jelly_type_6.png'
+import icon_home from '../assets/images/home.png'
+import icon_replay from '../assets/images/replay.png'
+
+import effect_btn from '../assets/media/effect_buttonclick.mp3'
 
 const GameLayout = styled.div`
   width: 100%;
@@ -27,13 +32,18 @@ const GameLayoutInner = styled.div`
 `;
 
 const Toolbar = styled.div`
-padding-right: 56px;
+  padding-right: 56px;
 
-* {
-  font-size: 20px;
-  font-weight: bold;
-  color: #66a7ba;
-}
+  .left {
+    float: left;
+    text-align: left;
+  }
+
+  * {
+    font-size: 20px;
+    font-weight: bold;
+    color: #66a7ba;
+  } 
 
   > * {
     margin-bottom: 10px;
@@ -46,11 +56,13 @@ const getRandomInt = (min, max) => {
 
 const jellyList = [jelly1, jelly2, jelly3, jelly4, jelly5, jelly6];
 
+const effectAudio = new Audio(effect_btn);
 export default function GamePage() {
   const [list, setList] = useState([]);
   const [score, setScore] = useState(0);
   const [isGameOver, setIsGameOver] = useState(false);
   const [playCnt, setPlayCnt] = useState(0);
+  let history = useHistory();
 
   const createList = useCallback(() => {
     const temp = []
@@ -82,6 +94,10 @@ export default function GamePage() {
     setIsGameOver(value);
   }, [])
 
+  const handleHomeButton = useCallback(() => {
+    history.push('/');
+  }, [])
+
   const handleReplayButton = useCallback(() => {
     setPlayCnt(v => v + 1);
   }, [])
@@ -96,7 +112,20 @@ export default function GamePage() {
     <GameLayout>
       <GameLayoutInner>
         <Toolbar>
-          <ReplayButton handleReplayButton={handleReplayButton} />
+          <div className="left">
+            <CustomButton clickFunc={() => {
+              handleHomeButton();
+              effectAudio.play();
+            }}>
+              Home<img alt="home" src={icon_home} />
+            </CustomButton>
+            <CustomButton clickFunc={() => {
+              handleReplayButton();
+              effectAudio.play();
+            }}>
+              Replay<img alt="replay" src={icon_replay} />
+            </CustomButton>
+          </div>
           <ScoreBox score={score} />
         </Toolbar>
         <GameTable
