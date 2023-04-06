@@ -1,8 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components';
 
-import music_background from '../assets/media/music_background.mp3'
-
 const Wrapper = styled.div`
   position: relative;
   width: 30px;
@@ -20,21 +18,11 @@ const TimerInner = styled.div`
 `;
 
 const TIME_VALUE = 150;
-const musicAudio = new Audio(music_background);
 let time = TIME_VALUE;
 let intervalId = null;
 
-musicAudio.loop = true;
-musicAudio.volume = 0.2;
-
-const resetMusic = () => {
-  musicAudio.pause();
-  musicAudio.playbackRate = 1.0;
-  musicAudio.currentTime = 0;
-}
-
 const Timer = (props) => {
-  const { playCnt, changeIsGameOver, } = props;
+  const { playCnt, changeIsGameOver, changeMusicRate, resetMusic} = props;
   const [timerHeight, setTimerHeight] = useState(null);
 
   const timerDiv = useRef();
@@ -47,7 +35,6 @@ const Timer = (props) => {
       resetMusic();
     }
 
-    musicAudio.play();
     const height = timerDiv.current.clientHeight;
     const value = height / time;
     setTimerHeight(height);
@@ -61,9 +48,9 @@ const Timer = (props) => {
         changeIsGameOver(true);
         resetMusic();
       } else if (time === 60) {
-        musicAudio.playbackRate = 1.25;
+        changeMusicRate(1.25);
       } else if (time === 30) {
-        musicAudio.playbackRate = 1.5;
+        changeMusicRate(1.5);
       }
     }, 1000)
     
@@ -72,7 +59,7 @@ const Timer = (props) => {
       intervalId = null;
       resetMusic();
     }
-  }, [playCnt, changeIsGameOver])
+  }, [playCnt, changeIsGameOver, changeMusicRate, resetMusic])
 
   return (
     <Wrapper ref={timerDiv}>
