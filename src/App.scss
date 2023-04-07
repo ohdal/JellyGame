@@ -6,10 +6,20 @@ body,
   min-width: 920px;
   min-height: 700px;
   overflow: auto;
+
+  * {
+    box-sizing: border-box;
+  }
 }
 
 #root {
   cursor: url("./assets/images/cursor.png"), auto !important;
+
+  ul {
+    list-style: none;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
 
   a,
   button {

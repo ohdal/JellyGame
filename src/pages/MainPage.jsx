@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
-import HowToModal from '../components/HowToModal'
+import { ModalContext } from '../containers/ModalContainer'
 import effect_btn from '../assets/media/effect_buttonclick.mp3'
 
 const MainLayout = styled.div`
@@ -49,9 +49,12 @@ const bears = [
 const effectAudio = new Audio(effect_btn);
 effectAudio.volume = 0.5;
 export default function MainPage() {
+  const modalContext = useContext(ModalContext);
+
+  console.log(modalContext);
+
   return (
     <MainLayout>
-      <HowToModal />
       <Wrapper>
         {bears}
         <p>Let's Play Jelly Game 🍭</p>
@@ -60,11 +63,12 @@ export default function MainPage() {
             PLAY
           </Link>
         </Button>
-        {/* <Button>
-          <Link to="/howto" onClick={() => { effectAudio.play() }}>
-            HOW TO
-          </Link>
-        </Button> */}
+        <Button className="pointer" onClick={() => {
+          effectAudio.play();
+          modalContext.modal.current.toggle();
+        }}>
+          HOW TO
+        </Button>
       </Wrapper>
     </MainLayout>
   )

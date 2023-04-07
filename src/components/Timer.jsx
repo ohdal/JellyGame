@@ -11,7 +11,7 @@ const Wrapper = styled.div`
 `;
 
 const TimerInner = styled.div`
-  width: inherit;
+  width: 24px;
   position: absolute;
   background: #66a7ba;
   bottom: 0;
