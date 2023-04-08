@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, forwardRef, useImperativeHandle, createElement } from 'react'
+import React, { useState, useCallback, useRef, forwardRef, useImperativeHandle } from 'react'
 import styled from 'styled-components'
 
 import gif_howto_1 from '../assets/images/howto_1.gif'
@@ -94,6 +94,7 @@ const ImgLayout = styled.div`
 
 const HowToModal = forwardRef((props, ref) => {
   const [visible, setVisible] = useState(false);
+  const contentRef = useRef();
 
   useImperativeHandle(ref, () => ({
     toggle,
@@ -101,7 +102,8 @@ const HowToModal = forwardRef((props, ref) => {
 
   const toggle = useCallback(() => {
     setVisible(v => !v);
-  }, [])
+    if (visible) contentRef.current.scrollTop = 0;
+  }, [visible])
 
   return (
     <Wrapper style={{ display: visible ? 'block' : 'none' }}>
@@ -115,7 +117,7 @@ const HowToModal = forwardRef((props, ref) => {
             </button>
           </div>
         </Header>
-        <Content>
+        <Content ref={contentRef}>
           <p className="title">제한시간 <span>150초</span> 내에 최대한 많은 젤리를 없애보세요 🤩</p>
           <ul>
             <li>
