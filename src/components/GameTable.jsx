@@ -136,7 +136,7 @@ let thTimer;
 let count = 0;
 let sizeCount = 0;
 export default function GameTable(props) {
-  const { list, score, children, isGameOver, changeList, changeScore } = props;
+  const { list, children, isGameOver, changeList, changeScore } = props;
   const [isDrag, setIsDrag] = useState(false);
   const [startBear, setStartBear] = useState(null);
   const dragComponentRef = useRef();
@@ -321,7 +321,7 @@ export default function GameTable(props) {
         <Table onMouseLeave={mouseEvent}>
           <tbody id="tbody-area" onMouseMove={mouseEvent} onMouseUp={mouseEvent}>
             {isGameOver ?
-              <GameOverBox><p>{"Score: " + score}</p></GameOverBox>
+              <GameOverBox />
               :
               <BearList list={list} mouseEvent={mouseEvent} checkBear={checkBear} particleGenerate={particleGenerate} />}
           </tbody>

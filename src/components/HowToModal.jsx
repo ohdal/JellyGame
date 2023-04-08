@@ -138,12 +138,6 @@ const HowToModal = forwardRef((props, ref) => {
                 <img alt="img" src={gif_howto_3} width="100%" height="100%" />
               </ImgLayout>
             </li>
-            <li>
-              개인 최고기록 갱신이 가능해요.<br />
-              <ImgLayout>
-                <img alt="img" />
-              </ImgLayout>
-            </li>
           </ul>
         </Content>
       </Modal>
