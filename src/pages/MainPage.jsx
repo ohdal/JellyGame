@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { ModalContext } from '../containers/ModalContainer'
@@ -20,7 +20,8 @@ const Wrapper = styled.div`
   color: white;
 `;
 
-const Button = styled.div`
+const Button = styled.button`
+  display: block;
   width: 200px;
   background: transparent;
   border: 3px solid #61dafb;
@@ -29,11 +30,6 @@ const Button = styled.div`
   padding: 10px 20px;
   margin: 0 auto;
   font-size: calc(10px + 2vmin);
-
-  a {
-    color: inherit;
-    text-decoration: none;
-  }
 
   &:not(:last-child) {
     margin-bottom: 10px;
@@ -50,18 +46,20 @@ const effectAudio = new Audio(effect_btn);
 effectAudio.volume = 0.5;
 export default function MainPage() {
   const modalContext = useContext(ModalContext);
+  let history = useHistory();
 
   return (
     <MainLayout>
       <Wrapper>
         {bears}
         <p>Let's Play Jelly Game 🍭</p>
-        <Button>
-          <Link to="/play" onClick={() => { effectAudio.play() }}>
-            PLAY
-          </Link>
+        <Button onClick={()=> {
+          effectAudio.play();
+          history.push("/play");
+        }}>
+          PLAY
         </Button>
-        <Button className="pointer" onClick={() => {
+        <Button onClick={() => {
           effectAudio.play();
           modalContext.modal.current.toggle();
         }}>
