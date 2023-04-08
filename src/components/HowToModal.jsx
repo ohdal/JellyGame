@@ -1,9 +1,19 @@
-import React, { useState, useCallback, forwardRef, useImperativeHandle } from 'react'
+import React, { useEffect, useState, useCallback, forwardRef, useImperativeHandle, createElement } from 'react'
 import styled from 'styled-components'
 
 import gif_howto_1 from '../assets/images/howto_1.gif'
 import gif_howto_2 from '../assets/images/howto_2.gif'
 import gif_howto_3 from '../assets/images/howto_3.gif'
+
+const Wrapper = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  background: rgba(0,0,0,.5);
+`
 
 const Modal = styled.div`
   position: absolute;
@@ -16,7 +26,7 @@ const Modal = styled.div`
   background: #171a1e;
   border: 3px solid #66a7ba;
   border-radius: 10px;
-  z-index: 1000;
+  z-index: 1100;
 `
 
 const Header = styled.div`
@@ -32,12 +42,14 @@ const Header = styled.div`
     float: right;
     
     .cancle-btn {
-      vertical-align: middle;
-      width: 20px;
-      height: 20px;
+      vertical-align: top;
+      width: 30px;
+      height: 30px;
       background: #66a7ba;
       border: none;
       border-radius: 50%;
+      font-size: 20px;
+      font-weight: bold;
       color: #171a1e;
     }
   }
@@ -92,46 +104,48 @@ const HowToModal = forwardRef((props, ref) => {
   }, [])
 
   return (
-    <Modal style={{ display: visible ? 'block' : 'none' }}>
-      <Header>
-        HOW TO ?
-        <div className="button-layout">
-          <button className="cancle-btn"
-            onClick={toggle}>
-            X
-          </button>
-        </div>
-      </Header>
-      <Content>
-        <p className="title">제한시간 <span>150초</span> 내에 최대한 많은 젤리를 없애보세요 🤩</p>
-        <ul>
-          <li>
-            드래그한 젤리 숫자의 합이 10인 경우, 젤리를 없앨 수 있어요.<br />
-            <ImgLayout>
-              <img alt="img" src={gif_howto_1} width="100%" height="100%" />
-            </ImgLayout>
-          </li>
-          <li>
-            점수는 젤리 갯수에따라 카운트 되요.<br />
-            <ImgLayout>
-              <img alt="img" src={gif_howto_2} width="100%" height="100%" />
-            </ImgLayout>
-          </li>
-          <li>
-            언제든 다시 시작할 수 있어요.<br />
-            <ImgLayout>
-              <img alt="img" src={gif_howto_3} width="100%" height="100%" />
-            </ImgLayout>
-          </li>
-          <li>
-            개인 최고기록 갱신이 가능해요.<br />
-            <ImgLayout>
-              <img alt="img" />
-            </ImgLayout>
-          </li>
-        </ul>
-      </Content>
-    </Modal>
+    <Wrapper style={{ display: visible ? 'block' : 'none' }}>
+      <Modal>
+        <Header>
+          HOW TO ?
+          <div className="button-layout">
+            <button className="cancle-btn"
+              onClick={toggle}>
+              x
+            </button>
+          </div>
+        </Header>
+        <Content>
+          <p className="title">제한시간 <span>150초</span> 내에 최대한 많은 젤리를 없애보세요 🤩</p>
+          <ul>
+            <li>
+              드래그한 젤리 숫자의 합이 10인 경우, 젤리를 없앨 수 있어요.<br />
+              <ImgLayout>
+                <img alt="img" src={gif_howto_1} width="100%" height="100%" />
+              </ImgLayout>
+            </li>
+            <li>
+              점수는 젤리 갯수에따라 카운트 되요.<br />
+              <ImgLayout>
+                <img alt="img" src={gif_howto_2} width="100%" height="100%" />
+              </ImgLayout>
+            </li>
+            <li>
+              언제든 다시 시작할 수 있어요.<br />
+              <ImgLayout>
+                <img alt="img" src={gif_howto_3} width="100%" height="100%" />
+              </ImgLayout>
+            </li>
+            <li>
+              개인 최고기록 갱신이 가능해요.<br />
+              <ImgLayout>
+                <img alt="img" />
+              </ImgLayout>
+            </li>
+          </ul>
+        </Content>
+      </Modal>
+    </Wrapper>
   )
 })
 
