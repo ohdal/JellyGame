@@ -1,6 +1,8 @@
-import React, { useEffect, useCallback, useState } from 'react'
+import React, { useEffect, useCallback, useState, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
+
+import { ModalContext } from '../containers/ModalContainer'
 
 import ScoreBox from '../components/ScoreBox'
 import VolumeSlider from '../components/VolumeSlider'
@@ -21,8 +23,10 @@ import effect_btn from '../assets/media/effect_buttonclick.mp3'
 import music_background from '../assets/media/music_background.mp3'
 
 const GameLayout = styled.div`
+  position: relative;
   width: 100%;
   height: 100%;
+  padding: 12px;
 `;
 
 const GameLayoutInner = styled.div`
@@ -69,6 +73,19 @@ const Toolbar = styled.div`
   }
 `;
 
+const HowToButton = styled.p`
+  position: absolute;
+  width: 25px;
+  height: 25px;
+  margin: 0 !important;
+  border: 3px solid #66a7ba;
+  border-radius: 50%;
+  color: #66a7ba;
+  font-size: 15px;
+  font-weight: bold;
+  text-align: center; 
+`
+
 const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min)) + min;
 }
@@ -104,6 +121,7 @@ export default function GamePage() {
   const [score, setScore] = useState(0);
   const [isGameOver, setIsGameOver] = useState(false);
   const [playCnt, setPlayCnt] = useState(0);
+  const modalContext = useContext(ModalContext);
   let history = useHistory();
 
   const createList = useCallback(() => {
@@ -159,6 +177,10 @@ export default function GamePage() {
 
   return (
     <GameLayout>
+      <HowToButton className="pointer"
+        onClick={() => { modalContext.modal.current.toggle() }}>
+        ?
+      </HowToButton>
       <GameLayoutInner>
         <Toolbar>
           <div className="left">

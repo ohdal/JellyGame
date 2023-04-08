@@ -51,8 +51,6 @@ effectAudio.volume = 0.5;
 export default function MainPage() {
   const modalContext = useContext(ModalContext);
 
-  console.log(modalContext);
-
   return (
     <MainLayout>
       <Wrapper>
