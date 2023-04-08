@@ -74,6 +74,28 @@ const Toolbar = styled.div`
   }
 `;
 
+const ImgButton = styled.button`
+  position: relative;
+  width: 100px;
+  height: 35px;
+  background: transparent;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  text-align: left;
+
+  img {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    transform: translate(0, -3px);
+  }
+
+  &:hover {
+    font-size: 22px;
+  }
+`;
+
 const HowToButton = styled.p`
   position: absolute;
   width: 25px;
@@ -188,18 +210,18 @@ export default function GamePage() {
       <GameLayoutInner>
         <Toolbar>
           <div className="left">
-            <CustomButton clickFunc={() => {
+            <ImgButton onClick={() => {
               handleHomeButton();
               effectBtnAudio.play();
             }}>
               Home<img alt="home" src={icon_home} />
-            </CustomButton>
-            <CustomButton clickFunc={() => {
+            </ImgButton>
+            <ImgButton onClick={() => {
               handleReplayButton();
               effectBtnAudio.play();
             }}>
               Replay<img alt="replay" src={icon_replay} />
-            </CustomButton>
+            </ImgButton>
           </div>
           <div className="right">
             <VolumeSlider changeVolume={changeVolume} defaultVolume={DEFAULT_VOLUME} />
