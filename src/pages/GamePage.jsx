@@ -6,7 +6,6 @@ import { ModalContext } from '../containers/ModalContainer'
 
 import ScoreBox from '../components/ScoreBox'
 import VolumeSlider from '../components/VolumeSlider'
-import CustomButton from '../components/CustomButton'
 import GameTable from '../components/GameTable'
 import Timer from '../components/Timer'
 
