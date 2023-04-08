@@ -5,8 +5,6 @@ import GameOverBox from './GameOverBox';
 import DragComponent from './DragComponent';
 import particle from '../assets/images/particle.gif'
 
-import effect_mouse from '../assets/media/effect_mouseup.mp3'
-
 const Wrapper = styled.div`
   min-height: 600px;
 
@@ -69,9 +67,8 @@ const JellyNumber = styled.p`
   color: #616161;
 `;
 
-const effectAudio = new Audio(effect_mouse);
 const BearList = (props) => {
-  const { list, mouseEvent, checkBear, particleGenerate } = props;
+  const { list, mouseEvent, checkBear, particleGenerate, } = props;
 
   return list.map((row, idxr) => {
     // idxr : idx + row
@@ -136,7 +133,7 @@ let thTimer;
 let count = 0;
 let sizeCount = 0;
 export default function GameTable(props) {
-  const { list, children, isGameOver, changeList, changeScore } = props;
+  const { list, children, isGameOver, changeList, changeScore, audio } = props;
   const [isDrag, setIsDrag] = useState(false);
   const [startBear, setStartBear] = useState(null);
   const dragComponentRef = useRef();
@@ -217,7 +214,7 @@ export default function GameTable(props) {
       if (count === 10) {
         changeScore(v => v + (ei - si) * (ej - sj));
         changeList(tempArray);
-        effectAudio.play();
+        audio.play();
       }
 
       setStartBear(null);
@@ -308,10 +305,6 @@ export default function GameTable(props) {
     if (isGameOver) noDragState();
 
   }, [isGameOver, noDragState])
-
-  useEffect(() => {
-    effectAudio.volume = 0.5;
-  }, [])
 
   return (
     <Wrapper>

@@ -20,6 +20,7 @@ import icon_home from '../assets/images/home.png'
 import icon_replay from '../assets/images/replay.png'
 
 import effect_btn from '../assets/media/effect_buttonclick.mp3'
+import effect_mouse from '../assets/media/effect_mouseup.mp3'
 import music_background from '../assets/media/music_background.mp3'
 
 const GameLayout = styled.div`
@@ -93,12 +94,14 @@ const getRandomInt = (min, max) => {
 const jellyList = [jelly1, jelly2, jelly3, jelly4, jelly5, jelly6];
 
 const DEFAULT_VOLUME = 0.3;
-const effectAudio = new Audio(effect_btn);
+const effectMouseAudio = new Audio(effect_mouse);
+const effectBtnAudio = new Audio(effect_btn);
 const musicAudio = new Audio(music_background);
 
 musicAudio.loop = true;
 musicAudio.volume = DEFAULT_VOLUME;
-effectAudio.volume = DEFAULT_VOLUME * 1.5;
+effectBtnAudio.volume = DEFAULT_VOLUME * 1.5;
+effectMouseAudio.volume = DEFAULT_VOLUME * 1.5;
 
 const resetMusic = () => {
   musicAudio.pause();
@@ -112,7 +115,8 @@ const changeMusicRate = (v) => {
 
 const changeVolume = (v) => {
   const effectVolume = v * 1.5;
-  effectAudio.volume = effectVolume > 1 ? 1 : effectVolume;
+  effectBtnAudio.volume = effectVolume > 1 ? 1 : effectVolume;
+  effectMouseAudio.volume = effectVolume > 1 ? 1 : effectVolume;
   musicAudio.volume = v;
 }
 
@@ -186,13 +190,13 @@ export default function GamePage() {
           <div className="left">
             <CustomButton clickFunc={() => {
               handleHomeButton();
-              effectAudio.play();
+              effectBtnAudio.play();
             }}>
               Home<img alt="home" src={icon_home} />
             </CustomButton>
             <CustomButton clickFunc={() => {
               handleReplayButton();
-              effectAudio.play();
+              effectBtnAudio.play();
             }}>
               Replay<img alt="replay" src={icon_replay} />
             </CustomButton>
@@ -204,10 +208,10 @@ export default function GamePage() {
         </Toolbar>
         <GameTable
           list={list}
-          score={score}
           isGameOver={isGameOver}
           changeList={changeList}
           changeScore={changeScore}
+          audio={effectMouseAudio}
         >
           <Timer playCnt={playCnt} changeIsGameOver={changeIsGameOver}
             resetMusic={resetMusic} changeMusicRate={changeMusicRate} />
