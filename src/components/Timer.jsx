@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useCallback, useRef } from 'react'
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
@@ -22,31 +22,34 @@ let time = TIME_VALUE;
 let intervalId = null;
 
 const Timer = (props) => {
-  const { playCnt, changeIsGameOver, changeMusicRate, resetMusic} = props;
+  const { playCnt, changeIsGameOver, changeMusicRate, resetMusic } = props;
   const [timerHeight, setTimerHeight] = useState(null);
 
   const timerDiv = useRef();
+
+  const resetTimer = useCallback(() => {
+    clearInterval(intervalId);
+    intervalId = null;
+    resetMusic();
+  }, [resetMusic])
 
   useEffect(() => {
     time = TIME_VALUE;
 
     if (intervalId) {
-      clearInterval(intervalId);
-      resetMusic();
+      resetTimer();
     }
-
+    
     const height = timerDiv.current.clientHeight;
     const value = height / time;
     setTimerHeight(height);
-
+    
     intervalId = setInterval(() => {
       time--;
       setTimerHeight(value * time);
       if (time === 0) {
-        clearInterval(intervalId);
-        intervalId = null;
+        resetTimer();
         changeIsGameOver(true);
-        resetMusic();
       } else if (time === 60) {
         changeMusicRate(1.25);
       } else if (time === 30) {
@@ -55,11 +58,9 @@ const Timer = (props) => {
     }, 1000)
     
     return () => {
-      clearInterval(intervalId);
-      intervalId = null;
-      resetMusic();
+      resetTimer();
     }
-  }, [playCnt, changeIsGameOver, changeMusicRate, resetMusic])
+  }, [playCnt, changeIsGameOver, changeMusicRate, resetTimer])
 
   return (
     <Wrapper ref={timerDiv}>
