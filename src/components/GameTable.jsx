@@ -219,7 +219,7 @@ export default function GameTable(props) {
 
       setStartBear(null);
     }
-  }, [list, startBear, changeScore, changeList])
+  }, [list, startBear, changeScore, changeList, audio])
 
   // Mouse 관련 이벤트 발생 시 처리 - 드래그 관련
   // Down: isDrag 변수 설정 (true), 마우스 클릭시의 최초 위치 값 저장
