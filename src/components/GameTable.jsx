@@ -103,6 +103,7 @@ const BearList = (props) => {
 }
 
 const computedNumber = (isMinus, WH) => {
+  // border-spacing: 2px;
   const standard = WH.width ? 54 : 58
   const value = WH.width ? WH.width : WH.height
 
@@ -164,8 +165,9 @@ export default function GameTable(props) {
       dragComponentRef.current.setAreaPos({ x: row, y: col });
     } else if (startBear) {
       console.log('score count start')
-      const offsetX = Math.floor(dragComponentRef.current.getAreaSize().height / 56);
-      const offsetY = Math.floor(dragComponentRef.current.getAreaSize().width / 52);
+      // border-spacing: 2px;
+      const offsetX = Math.floor(dragComponentRef.current.getAreaSize().height / 58);
+      const offsetY = Math.floor(dragComponentRef.current.getAreaSize().width / 54);
       const cn = dragComponentRef.current.getDirection();
       const { x, y } = dragComponentRef.current.getAreaPos();
 
