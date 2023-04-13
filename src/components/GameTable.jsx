@@ -133,7 +133,7 @@ let tbodyRect
 let thTimer;
 let count = 0;
 let sizeCount = 0;
-export default function GameTable(props) {
+const GameTable = (props) => {
   const { list, children, isGameOver, changeList, changeScore, audio } = props;
   const [isDrag, setIsDrag] = useState(false);
   const [startBear, setStartBear] = useState(null);
@@ -326,3 +326,6 @@ export default function GameTable(props) {
     </Wrapper>
   )
 }
+
+export default React.memo(GameTable);
+// export default GameTable;

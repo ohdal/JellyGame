@@ -10,7 +10,7 @@ const Wrapper = styled.div`
   }
 `;
 
-export default function ScoreBox(props) {
+const ScoreBox = (props) => {
   const { score } = props;
 
   return (
@@ -20,3 +20,6 @@ export default function ScoreBox(props) {
     </Wrapper>
   )
 }
+
+export default React.memo(ScoreBox);
+// export default ScoreBox;

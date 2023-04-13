@@ -39,11 +39,11 @@ const Timer = (props) => {
     if (intervalId) {
       resetTimer();
     }
-    
+
     const height = timerDiv.current.clientHeight;
     const value = height / time;
     setTimerHeight(height);
-    
+
     intervalId = setInterval(() => {
       time--;
       setTimerHeight(value * time);
@@ -56,7 +56,7 @@ const Timer = (props) => {
         changeMusicRate(1.5);
       }
     }, 1000)
-    
+
     return () => {
       resetTimer();
     }
@@ -69,4 +69,5 @@ const Timer = (props) => {
   )
 }
 
-export default Timer;
+export default React.memo(Timer);
+// export default Timer;
