@@ -114,7 +114,7 @@ const getRandomInt = (min, max) => {
 
 const jellyList = [jelly1, jelly2, jelly3, jelly4, jelly5, jelly6];
 
-const DEFAULT_VOLUME = 0;
+const DEFAULT_VOLUME = 0.3;
 const effectMouseAudio = new Audio(effect_mouse);
 const effectBtnAudio = new Audio(effect_btn);
 const musicAudio = new Audio(music_background);

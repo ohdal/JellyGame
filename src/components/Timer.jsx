@@ -36,10 +36,6 @@ const Timer = (props) => {
   useEffect(() => {
     time = TIME_VALUE;
 
-    if (intervalId) {
-      resetTimer();
-    }
-
     const height = timerDiv.current.clientHeight;
     const value = height / time;
     setTimerHeight(height);
