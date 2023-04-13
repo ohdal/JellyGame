@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState, useContext } from 'react'
+import React, { useEffect, useCallback, useState, useMemo, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -114,7 +114,7 @@ const getRandomInt = (min, max) => {
 
 const jellyList = [jelly1, jelly2, jelly3, jelly4, jelly5, jelly6];
 
-const DEFAULT_VOLUME = 0.3;
+const DEFAULT_VOLUME = 0;
 const effectMouseAudio = new Audio(effect_mouse);
 const effectBtnAudio = new Audio(effect_btn);
 const musicAudio = new Audio(music_background);
@@ -150,19 +150,27 @@ export default function GamePage() {
   let history = useHistory();
 
   const createList = useCallback(() => {
-    const temp = []
-
-    for (let i = 0; i < 10; i++) {
-      temp.push([]);
-
-      for (let j = 0; j < 15; j++) {
-        temp[i].push({
-          visible: true,
-          value: getRandomInt(1, 10),
-          src: jellyList[getRandomInt(0, jellyList.length)],
-        })
+    // 선언형 👉🏻
+    const temp = Array.from(Array(10), () => Array(15).fill(null).map(() => {
+      return {
+        visible: true,
+        value: getRandomInt(1, 10),
+        src: jellyList[getRandomInt(0, jellyList.length)],
       }
-    }
+    }))
+
+    // 명령형 👉🏻
+    // for (let i = 0; i < 10; i++) {
+    //   temp.push([]);
+
+    //   for (let j = 0; j < 15; j++) {
+    //     temp[i].push({
+    //       visible: true,
+    //       value: getRandomInt(1, 10),
+    //       src: jellyList[getRandomInt(0, jellyList.length)],
+    //     })
+    //   }
+    // }
 
     setList(temp);
   }, [])
