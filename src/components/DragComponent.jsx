@@ -51,19 +51,18 @@ const DragComponent = forwardRef((props, ref) => {
     return dir;
   }, [dir])
 
-  const setDirection = (str) => {
+  const setDirection = useCallback((str) => {
     setDir(str);
-  }
+  }, [])
 
   const getAreaPos = useCallback(() => {
     return { x: xPos, y: yPos };
   }, [xPos, yPos])
 
-  const setAreaPos = ({ x, y }) => {
-    // console.log('Pos', x, y)
+  const setAreaPos = useCallback(({ x, y }) => {
     setXPos(x);
     setYPos(y);
-  }
+  }, [])
 
   const computedPos = useCallback(() => {
     // table border-spacing => 2px
@@ -96,7 +95,7 @@ const DragComponent = forwardRef((props, ref) => {
       setAreaSize({ h: 56, w: 52 });
       setAreaPos({ x: -1, y: -1 });
     }
-  }, [isDrag, setAreaSize])
+  }, [isDrag, setAreaSize, setAreaPos])
 
   return (
     <Wrapper
