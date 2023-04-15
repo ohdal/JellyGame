@@ -67,6 +67,7 @@ const JellyNumber = styled.p`
   color: #616161;
 `;
 
+// Table 내 tr, td 태그 컴포넌트
 const BearList = (props) => {
   const { list, mouseEvent, checkBear, particleGenerate, } = props;
 
@@ -102,7 +103,7 @@ const BearList = (props) => {
   })
 }
 
-const computedNumber = (isMinus, WH) => {
+const computedDragAreaSize = (isMinus, WH) => {
   // border-spacing: 2px;
   const standard = WH.width ? 54 : 58
   const value = WH.width ? WH.width : WH.height
@@ -229,15 +230,17 @@ const GameTable = (props) => {
   // Up: isDrag 변수 설정 (false)
   const mouseEvent = useCallback((e, isTdTag = false) => {
 
-    // isTdTag 확인 이유 ?
-    // <td />에 className으로 detection을 주게 되면 <tbody /> MouseMove이벤트 발생시에
-    // 마우스가 Bear이미지 이외의 빈공간에 위치해도 Move 이벤트가 쓸데없이 발생하기 떄문에
-    // detection className을 주지 않는다.
-
-    // 하지만 <td />에 달린 MouseDown 이벤트 발생시 위에서 설명한 빈공간을 클릭한 경우
-    // e.target으로 detection className이 추가되지 않은 <td />가 들어오면서
-    // 아래 조건문에 걸리게 되고 isDrag는 false 상태이면서 checkBear 함수가 실행되서 오류가 나게 된다.
-    // 따라서 detection className 조건 또는 <td /> 인지 확인하는 조건을 추가해주어 처리해준다.
+    /* 
+    isTdTag 확인 이유 ?
+    <td />에 className으로 detection을 주게 되면 <tbody /> MouseMove이벤트 발생시에
+    마우스가 Bear이미지 이외의 빈공간에 위치해도 Move 이벤트가 쓸데없이 발생하기 떄문에
+    detection className을 주지 않는다. 
+    
+    하지만 <td />에 달린 MouseDown 이벤트 발생시 위에서 설명한 빈공간을 클릭한 경우
+    e.target으로 detection className이 추가되지 않은 <td />가 들어오면서
+    아래 조건문에 걸리게 되고 isDrag는 false 상태이면서 checkBear 함수가 실행되서 오류가 나게 된다.
+    따라서 detection className 조건 또는 <td /> 인지 확인하는 조건을 추가해주어 처리해준다.
+    */
 
     if (e.target.className.includes("detection") || isTdTag) {
       if (!isDrag && e._reactName === "onMouseDown") {
@@ -268,20 +271,20 @@ const GameTable = (props) => {
           let computedW, computedH
           if (width >= 0 && height >= 0) {
             dragComponentRef.current.setDirection("rightBottom");
-            computedW = computedNumber(false, { width })
-            computedH = computedNumber(false, { height })
+            computedW = computedDragAreaSize(false, { width })
+            computedH = computedDragAreaSize(false, { height })
           } else if (width < 0 && height >= 0) {
             dragComponentRef.current.setDirection("leftBottom");
-            computedW = computedNumber(true, { width })
-            computedH = computedNumber(false, { height })
+            computedW = computedDragAreaSize(true, { width })
+            computedH = computedDragAreaSize(false, { height })
           } else if (width >= 0 && height < 0) {
             dragComponentRef.current.setDirection("rightTop");
-            computedW = computedNumber(false, { width })
-            computedH = computedNumber(true, { height })
+            computedW = computedDragAreaSize(false, { width })
+            computedH = computedDragAreaSize(true, { height })
           } else {
             dragComponentRef.current.setDirection("leftTop");
-            computedW = computedNumber(true, { width })
-            computedH = computedNumber(true, { height })
+            computedW = computedDragAreaSize(true, { width })
+            computedH = computedDragAreaSize(true, { height })
           }
 
 

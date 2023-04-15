@@ -15,11 +15,11 @@ const Wrapper = styled.div`
 const DragComponent = forwardRef((props, ref) => {
   const { isDrag, mouseEvent, checkBear } = props;
 
-  const [dir, setDir] = useState("rightBottom");
-  const [width, setWidth] = useState(52);
-  const [height, setHeight] = useState(56);
-  const [xPos, setXPos] = useState(-1);
-  const [yPos, setYPos] = useState(-1);
+  const [dir, setDir] = useState("rightBottom"); // 사용자 드래그 방향 string
+  const [width, setWidth] = useState(52); // 드래그 컴포넌트 너비 number
+  const [height, setHeight] = useState(56); // 드래그 컴포넌트 높이 number
+  const [xPos, setXPos] = useState(-1); // 드래그 컴포넌트 위치 x 값 number
+  const [yPos, setYPos] = useState(-1); // 드래그 컴포넌트 위치 y 값 number
 
   useImperativeHandle(ref, () => ({
     getAreaSize,
@@ -30,14 +30,20 @@ const DragComponent = forwardRef((props, ref) => {
     setAreaPos,
   }))
 
+  // 기능 : width, height statea 값 반환
+  // 인자 : 없음
   const getAreaSize = useCallback(() => {
     return { width, height };
   }, [width, height])
 
+  // 기능 : width, height state 값 반환
+  // 인자 : 없음
   const setAreaSize = useCallback(({ h, w }) => {
-    // 한번더 isDrag 체크
-    // throttle 기능 때문에 isDrag가 false인데
-    // default size가 아닌 큰 사이즈로 변경시키도록 호출된다 🥲.
+    /* 
+    한번더 isDrag 체크하기
+    throttle 기능 때문에 isDrag가 false인데
+    default size가 아닌 큰 사이즈로 변경시키도록 호출된다 🥲.
+    */
     if (isDrag) {
       setHeight(h);
       setWidth(w);
@@ -47,23 +53,33 @@ const DragComponent = forwardRef((props, ref) => {
     }
   }, [isDrag])
 
+  // 기능 : dir state 값 반황
+  // 인자 : 없음
   const getDirection = useCallback(() => {
     return dir;
   }, [dir])
 
+  // 기능 : dir state 값 변경
+  // 인자 : 변경값 string
   const setDirection = useCallback((str) => {
     setDir(str);
   }, [])
 
+  // 기능 : xPos, yPos state 값 반환
+  // 인자 : 없음
   const getAreaPos = useCallback(() => {
     return { x: xPos, y: yPos };
   }, [xPos, yPos])
 
+  // 기능 : xPos, yPos state 값 변경
+  // 인자 : xPos 값 x number, yPos 값 y number
   const setAreaPos = useCallback(({ x, y }) => {
     setXPos(x);
     setYPos(y);
   }, [])
 
+  // 기능 : dir state값에 따라 계산된 위치 값 반환
+  // 인자 : 없음
   const computedPos = useCallback(() => {
     // table border-spacing => 2px
     const xDif = 2 * yPos;
@@ -90,7 +106,13 @@ const DragComponent = forwardRef((props, ref) => {
     return `translate(${resultX}px, ${resultY}px)`;
   }, [xPos, yPos, dir, getAreaSize])
 
+  // 역할 : DragComponent.jsx 사이즈, 위치 초기화
   useEffect(() => {
+    /* 
+    z-index속성이 1이고 최적화때문에 opacity 속성을 사용.
+    따라서 마우스 이벤트가 제대로 발생하지 않기 때문에
+    반드시 사이즈와 위치를 초기화 시켜줘야 한다.
+    */
     if (!isDrag) {
       setAreaSize({ h: 56, w: 52 });
       setAreaPos({ x: -1, y: -1 });

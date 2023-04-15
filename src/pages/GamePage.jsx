@@ -108,10 +108,6 @@ const HowToButton = styled.p`
   text-align: center; 
 `
 
-const getRandomInt = (min, max) => {
-  return Math.floor(Math.random() * (max - min)) + min;
-}
-
 const jellyList = [jelly1, jelly2, jelly3, jelly4, jelly5, jelly6];
 
 const DEFAULT_VOLUME = 0.3;
@@ -124,31 +120,47 @@ musicAudio.volume = DEFAULT_VOLUME;
 effectBtnAudio.volume = DEFAULT_VOLUME * 1.5;
 effectMouseAudio.volume = DEFAULT_VOLUME * 1.5;
 
+// 기능 : min 이상 max 미만의 랜덤값을 반환
+// 인자 : 최솟값 min, 최댓값 max
+const getRandomInt = (min, max) => {
+  return Math.floor(Math.random() * (max - min)) + min;
+}
+
+// 기능 : 배경음악 reset
+// 인자 : 없음
 const resetMusic = () => {
   musicAudio.pause();
   musicAudio.playbackRate = 1.0;
   musicAudio.currentTime = 0;
 }
 
-const changeMusicRate = (v) => {
-  musicAudio.playbackRate = v;
+// 기능 : 배경음악 속도 조절
+// 인자 : 속도 값 speed (기본 1.0)
+const changeMusicRate = (speed) => {
+  musicAudio.playbackRate = speed;
 }
 
-const changeVolume = (v) => {
-  const effectVolume = v * 1.5;
+// 기능 : 모든 Audio 객체 볼륨 조절
+// 인자 : 볼륨 값 volume (기본 1.0)
+const changeVolume = (volume) => {
+  // effectVolume이 배경음악보다 작기 때문에 1.5배
+  const effectVolume = volume * 1.5;
   effectBtnAudio.volume = effectVolume > 1 ? 1 : effectVolume;
   effectMouseAudio.volume = effectVolume > 1 ? 1 : effectVolume;
-  musicAudio.volume = v;
+
+  musicAudio.volume = volume;
 }
 
 export default function GamePage() {
-  const [list, setList] = useState([]);
-  const [score, setScore] = useState(0);
-  const [isGameOver, setIsGameOver] = useState(false);
-  const [playCnt, setPlayCnt] = useState(0);
+  const [list, setList] = useState([]); // 2차원 배열 Array
+  const [score, setScore] = useState(0); // 점수 number
+  const [isGameOver, setIsGameOver] = useState(false); // 게임오버 여부 boolean
+  const [playCnt, setPlayCnt] = useState(0); // 게임 재시작 카운트 number
   const modalContext = useContext(ModalContext);
   let history = useHistory();
 
+  // 기능 : 2차원 배열 Array 생성
+  // 인자 : 없음
   const createList = useCallback(() => {
     // 선언형 👉🏻
     const temp = Array.from(Array(10), () => Array(15).fill(null).map(() => {
@@ -159,53 +171,45 @@ export default function GamePage() {
       }
     }))
 
-    // 명령형 👉🏻
-    // for (let i = 0; i < 10; i++) {
-    //   temp.push([]);
+    /* 명령형 👉🏻
+    for (let i = 0; i < 10; i++) {
+      temp.push([]);
 
-    //   for (let j = 0; j < 15; j++) {
-    //     temp[i].push({
-    //       visible: true,
-    //       value: getRandomInt(1, 10),
-    //       src: jellyList[getRandomInt(0, jellyList.length)],
-    //     })
-    //   }
-    // }
+      for (let j = 0; j < 15; j++) {
+        temp[i].push({
+          visible: true,
+          value: getRandomInt(1, 10),
+          src: jellyList[getRandomInt(0, jellyList.length)],
+        })
+      }
+    } */
 
     setList(temp);
   }, [])
 
-  const changeList = useCallback((value) => {
-    setList(value);
-  }, [])
-
-  const changeScore = useCallback((value) => {
-    setScore(value);
-  }, [])
-
-  const changeIsGameOver = useCallback((value) => {
-    setIsGameOver(value);
-  }, [])
-
+  // 기능 : '/' url로 이동
+  // 인자 : 없음
   const handleHomeButton = useCallback(() => {
     history.push('/');
   }, [history])
-
+  
+  // 기능 : playCnt state 값 증가
+  // 인자 : 없음
   const handleReplayButton = useCallback(() => {
     setPlayCnt(v => v + 1);
   }, [])
 
+  // 역할 : playCnt state 변경시 replay 처리
   useEffect(() => {
     musicAudio.play();
-    changeIsGameOver(false);
-    changeScore(0);
+    setIsGameOver(false);
+    setScore(0);
     createList();
-  }, [playCnt, createList, changeScore, changeIsGameOver])
-
+  }, [playCnt, createList])
+  
+  // 역할 : GamePage.jsx mount시 audio 볼륨 default로 설정
   useEffect(() => {
-    return () => {
-      changeVolume(DEFAULT_VOLUME);
-    }
+    changeVolume(DEFAULT_VOLUME);
   }, [])
 
   return (
@@ -238,11 +242,11 @@ export default function GamePage() {
         <GameTable
           list={list}
           isGameOver={isGameOver}
-          changeList={changeList}
-          changeScore={changeScore}
+          changeList={setList}
+          changeScore={setScore}
           audio={effectMouseAudio}
         >
-          <Timer playCnt={playCnt} changeIsGameOver={changeIsGameOver}
+          <Timer playCnt={playCnt} changeIsGameOver={setIsGameOver}
             resetMusic={resetMusic} changeMusicRate={changeMusicRate} />
         </GameTable>
       </GameLayoutInner>
