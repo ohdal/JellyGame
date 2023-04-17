@@ -67,9 +67,24 @@ const JellyNumber = styled.p`
   color: #616161;
 `;
 
+
+// Particle Img 컴포넌트
+const Particle = (props) => {
+  const { r, c } = props
+
+  useEffect(() => {
+    setTimeout(() => {
+      const el = document.getElementById('particle-' + r + '-' + c);
+      if (el) el.style.visibility = 'hidden';
+    }, 500)
+  }, [r, c])
+
+  return <ParticleImg alt="particle" id={'particle-' + r + '-' + c} src={particle} />
+};
+
 // Table 내 tr, td 태그 컴포넌트
 const BearList = (props) => {
-  const { list, mouseEvent, checkBear, particleGenerate, } = props;
+  const { list, mouseEvent, checkBear, } = props;
 
   return list.map((row, idxr) => {
     // idxr : idx + row
@@ -87,7 +102,7 @@ const BearList = (props) => {
             checkBear(null, null, "Up");
           }}
         >
-          {!col.visible && particleGenerate(idxr, idxc)}
+          {!col.visible && <Particle r={idxr} c={idxc} />}
           <JellyImg
             style={{ 'visibility': col.visible ? 'visible' : 'hidden' }}
             alt="jelly" className="no-drag detection pointer"
@@ -103,15 +118,19 @@ const BearList = (props) => {
   })
 }
 
-const computedDragAreaSize = (isMinus, WH) => {
+// 기능 : 드래그 영역 사이즈 계산
+// 인자 : 음수 값 여부 bool, 너비 또는 높이 값 object
+const computedDragAreaSize = (isMinus, { width, height }) => {
   // border-spacing: 2px;
-  const standard = WH.width ? 54 : 58
-  const value = WH.width ? WH.width : WH.height
+  const standard = width ? 54 : 58
+  const value = width ? width : height
 
   if (isMinus) return standard * (Math.ceil(value * -1 / standard) + 1)
   else return standard * Math.ceil(value / standard)
 }
 
+// 기능 : 마우스 이벤트 오버클락 방지
+// 인자 : 드래그 영역 사이즈 object, 실행 함수 function, 지연 시간 number
 const throttle = (data, fn, delay) => {
   let w = data.width
   let h = data.height
@@ -120,6 +139,7 @@ const throttle = (data, fn, delay) => {
       thTimer = null;
       const temp = fn();
 
+      // 드래그 영역 사이즈가 마지막에 계산된 사이즈와 맞는지 체크  
       if (temp.w !== w && temp.h !== h) {
         fn();
       }
@@ -140,16 +160,8 @@ const GameTable = (props) => {
   const [startBear, setStartBear] = useState(null);
   const dragComponentRef = useRef();
 
-  const particleGenerate = useCallback((r, c) => {
-    setTimeout(() => {
-      const el = document.getElementById('particle-' + r + '-' + c);
-      if (el) el.style.visibility = 'hidden';
-    }, 500)
-
-    return <ParticleImg alt="particle" id={'particle-' + r + '-' + c} src={particle} />
-  }, []);
-
-
+  // 기능 : 사용자가 드래그 하지 않는 상태 일 때 처리
+  // 인자 : 없음
   const noDragState = useCallback(() => {
     if (isDrag) {
       setIsDrag(false);
@@ -157,15 +169,15 @@ const GameTable = (props) => {
     }
   }, [isDrag])
 
-  // Mouse 이벤트 발생 시 처리 - 게임 점수 관련
-  // Down: 클릭 시작점 td태그 id를 통해 x,y 위치 가져오기 (2차원배열 인덱스 값)
-  // Up: DragComponent.jsx의 width, height 값을 통해 for문 돌릴 2차원배열 시작좌표, 끝좌표를 잡기 및 점수 계산하기
+  // 기능 : Mouse 이벤트 발생 시 게임 점수 관련 처리
+  // 인자 : row 값 number, col 값 number, 마우스 down, up 상태 값 string
   const checkBear = useCallback((row, col, state) => {
     if (!startBear && state === "Down") {
+      // 클릭 시작점 td태그 id를 통해 x,y 위치 가져오기 (2차원배열 인덱스 값)
       setStartBear(true);
       dragComponentRef.current.setAreaPos({ x: row, y: col });
     } else if (startBear) {
-      console.log('score count start')
+      // DragComponent.jsx의 width, height 값을 통해 for문 돌릴 2차원배열 시작좌표, 끝좌표를 잡기 및 점수 계산하기
       // border-spacing: 2px;
       const offsetX = Math.floor(dragComponentRef.current.getAreaSize().height / 58);
       const offsetY = Math.floor(dragComponentRef.current.getAreaSize().width / 54);
@@ -224,10 +236,8 @@ const GameTable = (props) => {
     }
   }, [list, startBear, changeScore, changeList, audio])
 
-  // Mouse 관련 이벤트 발생 시 처리 - 드래그 관련
-  // Down: isDrag 변수 설정 (true), 마우스 클릭시의 최초 위치 값 저장
-  // Move: 클릭시 저장된 최초 위치 값과 계속 바뀌는 사용자 위치 값 파악 후, 드래그 영역 방향 설정
-  // Up: isDrag 변수 설정 (false)
+  // 기능 : Mouse 관련 이벤트 발생 시 드래그 관련 처리
+  // 인자 : 마우스 이벤트 객체 object, 이벤트 발생 객체 <td/> 여부 값 bool
   const mouseEvent = useCallback((e, isTdTag = false) => {
 
     /* 
@@ -244,6 +254,7 @@ const GameTable = (props) => {
 
     if (e.target.className.includes("detection") || isTdTag) {
       if (!isDrag && e._reactName === "onMouseDown") {
+        // isDrag 변수 설정 (true), 마우스 클릭시의 최초 위치 값 저장
         setIsDrag(true);
 
         const el = document.getElementById("tbody-area")
@@ -255,6 +266,7 @@ const GameTable = (props) => {
       }
 
       if (isDrag && e._reactName === "onMouseMove") {
+        // 클릭시 저장된 최초 위치 값과 계속 바뀌는 사용자 위치 값 파악 후, 드래그 영역 방향 설정
         if (tbodyRect.x > e.clientX || tbodyRect.y > e.clientY) return;
 
         count++
@@ -292,15 +304,17 @@ const GameTable = (props) => {
 
           // console.log(dragComponentRef.currnet);
           return { w: computedW, h: computedH, }
-        }, 50)
+        }, 100)
       }
     }
 
 
     if (e._reactName === "onMouseUp" && isDrag) {
+      // isDrag 변수 설정 (false)
       noDragState();
     }
     if (e._reactName === "onMouseLeave" && isDrag && e.target.tagName === "TABLE") {
+      // isDrag 변수 설정 (false)
       noDragState();
     }
 
@@ -321,7 +335,7 @@ const GameTable = (props) => {
             {isGameOver ?
               <GameOverBox />
               :
-              <BearList list={list} mouseEvent={mouseEvent} checkBear={checkBear} particleGenerate={particleGenerate} />}
+              <BearList list={list} mouseEvent={mouseEvent} checkBear={checkBear} />}
           </tbody>
         </Table>
       </div>
