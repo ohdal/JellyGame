@@ -23,16 +23,19 @@ let intervalId = null;
 
 const Timer = (props) => {
   const { playCnt, changeIsGameOver, changeMusicRate, resetMusic } = props;
-  const [timerHeight, setTimerHeight] = useState(null);
+  const [timerHeight, setTimerHeight] = useState(null); // <TImerInner/> height 값 number
 
   const timerDiv = useRef();
 
+  // 기능 : 타이머 reset
+  // 인자 : 없음
   const resetTimer = useCallback(() => {
     clearInterval(intervalId);
     intervalId = null;
     resetMusic();
   }, [resetMusic])
 
+  // 역할 : 타이머 interval 설정
   useEffect(() => {
     time = TIME_VALUE;
 
