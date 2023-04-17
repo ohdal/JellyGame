@@ -81,7 +81,8 @@ const DragComponent = forwardRef((props, ref) => {
   // 기능 : dir state값에 따라 계산된 위치 값 반환
   // 인자 : 없음
   const computedPos = useCallback(() => {
-    // table border-spacing => 2px
+    // table border-spacing 때문에
+    // 2px씩 차이나는 값을 계산해서 더해준다.
     const xDif = 2 * yPos;
     const yDif = 2 * xPos;
     let resultX = yPos * 52 + xDif, resultY = xPos * 56 + yDif;
