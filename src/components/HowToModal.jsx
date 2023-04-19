@@ -100,6 +100,8 @@ const HowToModal = forwardRef((props, ref) => {
     toggle,
   }))
 
+  // 기능 : HowToModal.jsx 컴포넌트 toggle & scrollTop 초기화
+  // 인자 : 없음
   const toggle = useCallback(() => {
     setVisible(v => !v);
     if (visible) contentRef.current.scrollTop = 0;
