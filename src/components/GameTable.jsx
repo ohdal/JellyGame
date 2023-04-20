@@ -91,15 +91,11 @@ const BearList = (props) => {
     // idxc : idx + col
     return <tr key={"row-" + idxr}>{
       row.map((col, idxc) => {
-        return <td key={"col-" + idxc} id={"bear-" + idxr + "-" + idxc}
+        return <td key={"col-" + idxc}
           onMouseDown={(e) => {
             if (!col.visible) return;
             mouseEvent(e, true)
             checkBear(idxr, idxc, "Down");
-          }}
-          onMouseUp={(e) => {
-            mouseEvent(e);
-            checkBear(null, null, "Up");
           }}
         >
           {!col.visible && <Particle r={idxr} c={idxc} />}
