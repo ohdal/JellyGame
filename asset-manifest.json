@@ -1,0 +1,37 @@
+{
+  "files": {
+    "main.css": "/jellygame/static/css/main.8c9ec47d.chunk.css",
+    "main.js": "/jellygame/static/js/main.615b902f.chunk.js",
+    "main.js.map": "/jellygame/static/js/main.615b902f.chunk.js.map",
+    "runtime-main.js": "/jellygame/static/js/runtime-main.dc6c2c4d.js",
+    "runtime-main.js.map": "/jellygame/static/js/runtime-main.dc6c2c4d.js.map",
+    "static/js/2.86ded47f.chunk.js": "/jellygame/static/js/2.86ded47f.chunk.js",
+    "static/js/2.86ded47f.chunk.js.map": "/jellygame/static/js/2.86ded47f.chunk.js.map",
+    "static/js/3.d2eb6df5.chunk.js": "/jellygame/static/js/3.d2eb6df5.chunk.js",
+    "static/js/3.d2eb6df5.chunk.js.map": "/jellygame/static/js/3.d2eb6df5.chunk.js.map",
+    "index.html": "/jellygame/index.html",
+    "static/css/main.8c9ec47d.chunk.css.map": "/jellygame/static/css/main.8c9ec47d.chunk.css.map",
+    "static/js/2.86ded47f.chunk.js.LICENSE.txt": "/jellygame/static/js/2.86ded47f.chunk.js.LICENSE.txt",
+    "static/media/effect_buttonclick.e4323d06.mp3": "/jellygame/static/media/effect_buttonclick.e4323d06.mp3",
+    "static/media/effect_gameover.58d8dc85.mp3": "/jellygame/static/media/effect_gameover.58d8dc85.mp3",
+    "static/media/effect_mouseup.1247473a.mp3": "/jellygame/static/media/effect_mouseup.1247473a.mp3",
+    "static/media/gameover.6cbf3870.png": "/jellygame/static/media/gameover.6cbf3870.png",
+    "static/media/gameover_BG.55d873cc.png": "/jellygame/static/media/gameover_BG.55d873cc.png",
+    "static/media/howto_1.4d0a8cb0.gif": "/jellygame/static/media/howto_1.4d0a8cb0.gif",
+    "static/media/howto_2.1e98669c.gif": "/jellygame/static/media/howto_2.1e98669c.gif",
+    "static/media/howto_3.1d155684.gif": "/jellygame/static/media/howto_3.1d155684.gif",
+    "static/media/jelly_type_1.6626c5d6.png": "/jellygame/static/media/jelly_type_1.6626c5d6.png",
+    "static/media/jelly_type_2.865242b3.png": "/jellygame/static/media/jelly_type_2.865242b3.png",
+    "static/media/jelly_type_3.ca78b6be.png": "/jellygame/static/media/jelly_type_3.ca78b6be.png",
+    "static/media/jelly_type_4.187db0fc.png": "/jellygame/static/media/jelly_type_4.187db0fc.png",
+    "static/media/jelly_type_5.393acaa6.png": "/jellygame/static/media/jelly_type_5.393acaa6.png",
+    "static/media/jelly_type_6.0d249d0b.png": "/jellygame/static/media/jelly_type_6.0d249d0b.png",
+    "static/media/music_background.f25a21a9.mp3": "/jellygame/static/media/music_background.f25a21a9.mp3"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.dc6c2c4d.js",
+    "static/js/2.86ded47f.chunk.js",
+    "static/css/main.8c9ec47d.chunk.css",
+    "static/js/main.615b902f.chunk.js"
+  ]
+}
