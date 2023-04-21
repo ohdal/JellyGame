@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/JellyGame/static/css/main.104175f0.chunk.css",
-    "main.js": "/JellyGame/static/js/main.24ecf0e0.chunk.js",
-    "main.js.map": "/JellyGame/static/js/main.24ecf0e0.chunk.js.map",
+    "main.js": "/JellyGame/static/js/main.9954e69c.chunk.js",
+    "main.js.map": "/JellyGame/static/js/main.9954e69c.chunk.js.map",
     "runtime-main.js": "/JellyGame/static/js/runtime-main.c31812e1.js",
     "runtime-main.js.map": "/JellyGame/static/js/runtime-main.c31812e1.js.map",
     "static/js/2.3d86a6f1.chunk.js": "/JellyGame/static/js/2.3d86a6f1.chunk.js",
@@ -32,6 +32,6 @@
     "static/js/runtime-main.c31812e1.js",
     "static/js/2.3d86a6f1.chunk.js",
     "static/css/main.104175f0.chunk.css",
-    "static/js/main.24ecf0e0.chunk.js"
+    "static/js/main.9954e69c.chunk.js"
   ]
 }
