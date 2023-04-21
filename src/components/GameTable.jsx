@@ -171,7 +171,7 @@ const GameTable = (props) => {
   // 인자 : row 값 number, col 값 number, 마우스 down, up 상태 값 string
   const checkBear = useCallback((row, col, state) => {
     if (!startBear && state === "Down") {
-      // 클릭 시작점 td태그 id를 통해 x,y 위치 가져오기 (2차원배열 인덱스 값)
+      // row,col값(2차원배열 인덱스 값)을 받아 DragComponent.jsx xPos, yPos값 변경하기
       setStartBear(true);
       dragComponentRef.current.setAreaPos({ x: row, y: col });
     } else if (startBear) {
@@ -183,6 +183,7 @@ const GameTable = (props) => {
       const { x, y } = dragComponentRef.current.getAreaPos();
 
       // start, end
+      // 드래그 방향에 따라 2중for문 시작조건, 종료조건이 달라짐
       let si, ei, sj, ej;
       switch (cn) {
         case "rightBottom":
