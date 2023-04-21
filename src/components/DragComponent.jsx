@@ -122,7 +122,7 @@ const DragComponent = forwardRef((props, ref) => {
 
   return (
     <Wrapper
-      className={dir}
+      className={`detection ${dir}`}
       style={{
         opacity: isDrag ? 0.5 : 0,
         width: `${width}px`,
@@ -133,6 +133,7 @@ const DragComponent = forwardRef((props, ref) => {
         mouseEvent(e);
         checkBear(null, null, "Up");
       }}
+      onMouseMove={mouseEvent}
     />
   )
 })

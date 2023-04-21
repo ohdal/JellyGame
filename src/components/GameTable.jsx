@@ -145,7 +145,6 @@ const throttle = (data, fn, delay) => {
 
 let startClientX
 let startClientY
-let tbodyRect
 
 let thTimer;
 let count = 0;
@@ -256,9 +255,6 @@ const GameTable = (props) => {
         // isDrag 변수 설정 (true), 마우스 클릭시의 최초 위치 값 저장
         setIsDrag(true);
 
-        const el = document.getElementById("tbody-area")
-        tbodyRect = el.getClientRects()[0]
-
         // v === true : e.target이 td 태그인 경우
         startClientX = isTdTag ? e.target.getClientRects()[0].x : e.target.parentNode.getClientRects()[0].x
         startClientY = isTdTag ? e.target.getClientRects()[0].y : e.target.parentNode.getClientRects()[0].y
@@ -266,16 +262,14 @@ const GameTable = (props) => {
 
       if (isDrag && e._reactName === "onMouseMove") {
         // 클릭시 저장된 최초 위치 값과 계속 바뀌는 사용자 위치 값 파악 후, 드래그 영역 방향, 사이즈 설정
-        if (tbodyRect.x > e.clientX || tbodyRect.y > e.clientY) return;
-
         count++
         console.log('throttle 적용 전', count);
         throttle(dragComponentRef.current.getAreaSize(), () => {
           sizeCount++;
           console.log('throttle 적용 후', sizeCount);
+
           const width = e.clientX - startClientX
           const height = e.clientY - startClientY
-
 
           let computedW, computedH
           if (width >= 0 && height >= 0) {
