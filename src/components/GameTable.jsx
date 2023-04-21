@@ -175,7 +175,7 @@ const GameTable = (props) => {
       setStartBear(true);
       dragComponentRef.current.setAreaPos({ x: row, y: col });
     } else if (startBear) {
-      // DragComponent.jsx의 width, height 값을 통해 for문 돌릴 2차원배열 시작좌표, 끝좌표를 잡기 및 점수 계산하기
+      // DragComponent.jsx의 width, height 값을 통해 for문 돌릴 시작조건, 종료조건 잡기 및 점수 계산하기
       // border-spacing: 2px;
       const offsetX = Math.floor(dragComponentRef.current.getAreaSize().height / 58);
       const offsetY = Math.floor(dragComponentRef.current.getAreaSize().width / 54);
@@ -183,7 +183,7 @@ const GameTable = (props) => {
       const { x, y } = dragComponentRef.current.getAreaPos();
 
       // start, end
-      // 드래그 방향에 따라 2중for문 시작조건, 종료조건이 달라짐
+      // 드래그 방향에 따라 이중for문 시작조건, 종료조건이 달라짐
       let si, ei, sj, ej;
       switch (cn) {
         case "rightBottom":
