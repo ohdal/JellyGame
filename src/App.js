@@ -12,7 +12,7 @@ function App() {
           <Route exact path="/">
             <MainPage />
           </Route>
-          <Route path="/play">
+          <Route exact path="/play">
             <GamePage />
           </Route>
         </Switch>
