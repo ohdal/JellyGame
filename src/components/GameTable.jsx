@@ -100,12 +100,12 @@ const BearList = (props) => {
         >
           {!col.visible && <Particle r={idxr} c={idxc} />}
           <JellyImg
-            style={{ 'visibility': col.visible ? 'visible' : 'hidden' }}
-            alt="jelly" className="no-drag detection pointer"
+            style={{ 'opacity': col.visible ? 1 : 0 }}
+            alt="jelly" className={`no-drag detection ${col.visible && 'pointer'}`}
             key={"jelly-" + idxc} src={col.src} />
           <JellyNumber
-            style={{ 'visibility': col.visible ? 'visible' : 'hidden' }}
-            className="detection pointer">
+            style={{ 'opacity': col.visible ? 1 : 0 }}
+            className={`detection ${col.visible && 'pointer'}`}>
             {col.value}
           </JellyNumber>
         </td>
