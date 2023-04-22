@@ -1,4 +1,4 @@
-# React App JellyGame 🐻
+# 🐻 React App JellyGame
 
 
 ## 프로젝트 소개
