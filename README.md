@@ -1,5 +1,6 @@
 # React App JellyGame 🐻
 
+
 ## 프로젝트 소개
 
 React를 이용한 개인 프로젝트 JellyGame 입니다.
@@ -18,11 +19,13 @@ React를 이용한 개인 프로젝트 JellyGame 입니다.
 
 <https:/ohdal.github.io/JellyGame>
 
+
 ## 주요 기능
 
 보다 상세한 내용은 아래 notion 링크를 참고해주세요. 🙂
 
 <https://ohdal.notion.site/JellyGame-eeade42cb0204cd2a9cdb9c524464183>
+
 
 ## 프로젝트 Clone 후 실행 주의사항
 
