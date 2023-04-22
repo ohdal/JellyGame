@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/JellyGame/static/css/main.104175f0.chunk.css",
-    "main.js": "/JellyGame/static/js/main.db1052d3.chunk.js",
-    "main.js.map": "/JellyGame/static/js/main.db1052d3.chunk.js.map",
+    "main.css": "/JellyGame/static/css/main.7fc00349.chunk.css",
+    "main.js": "/JellyGame/static/js/main.01a6e701.chunk.js",
+    "main.js.map": "/JellyGame/static/js/main.01a6e701.chunk.js.map",
     "runtime-main.js": "/JellyGame/static/js/runtime-main.c31812e1.js",
     "runtime-main.js.map": "/JellyGame/static/js/runtime-main.c31812e1.js.map",
     "static/js/2.3d86a6f1.chunk.js": "/JellyGame/static/js/2.3d86a6f1.chunk.js",
@@ -10,7 +10,7 @@
     "static/js/3.d2eb6df5.chunk.js": "/JellyGame/static/js/3.d2eb6df5.chunk.js",
     "static/js/3.d2eb6df5.chunk.js.map": "/JellyGame/static/js/3.d2eb6df5.chunk.js.map",
     "index.html": "/JellyGame/index.html",
-    "static/css/main.104175f0.chunk.css.map": "/JellyGame/static/css/main.104175f0.chunk.css.map",
+    "static/css/main.7fc00349.chunk.css.map": "/JellyGame/static/css/main.7fc00349.chunk.css.map",
     "static/js/2.3d86a6f1.chunk.js.LICENSE.txt": "/JellyGame/static/js/2.3d86a6f1.chunk.js.LICENSE.txt",
     "static/media/effect_buttonclick.e4323d06.mp3": "/JellyGame/static/media/effect_buttonclick.e4323d06.mp3",
     "static/media/effect_gameover.58d8dc85.mp3": "/JellyGame/static/media/effect_gameover.58d8dc85.mp3",
@@ -31,7 +31,7 @@
   "entrypoints": [
     "static/js/runtime-main.c31812e1.js",
     "static/js/2.3d86a6f1.chunk.js",
-    "static/css/main.104175f0.chunk.css",
-    "static/js/main.db1052d3.chunk.js"
+    "static/css/main.7fc00349.chunk.css",
+    "static/js/main.01a6e701.chunk.js"
   ]
 }
