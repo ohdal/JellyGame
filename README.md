@@ -1,4 +1,4 @@
-# React App JellyGame 🐻
+# 🐻 React App JellyGame
 
 
 ## 프로젝트 소개
@@ -17,7 +17,7 @@ React를 이용한 개인 프로젝트 JellyGame 입니다.
 
 아래 링크로 접속하면 게임을 하실 수 있습니다.
 
-<https:/ohdal.github.io/JellyGame>
+<https://ohdal.github.io/JellyGame/>
 
 
 ## 주요 기능
