@@ -26,9 +26,3 @@ React를 이용한 개인 프로젝트 JellyGame 입니다.
 
 <https://ohdal.notion.site/JellyGame-eeade42cb0204cd2a9cdb9c524464183>
 
-
-## 프로젝트 Clone 후 실행 주의사항
-
-프로젝트 실행 시 node version을 체크 해주세요.
-
-node-sass 5.x 버전을 사용중이기 때문에 node 15.x 버전이 필요합니다.
