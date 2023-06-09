@@ -1,4 +1,6 @@
-class MyAudio {
+import { MyAudio } from "../types";
+
+class CustomAudio implements MyAudio {
   private audio: HTMLAudioElement;
 
   constructor(src: string, volume: number = 1, loop: boolean = false) {
@@ -26,4 +28,4 @@ class MyAudio {
   }
 }
 
-export default MyAudio;
+export default CustomAudio;
