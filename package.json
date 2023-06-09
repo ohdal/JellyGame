@@ -42,6 +42,8 @@
     ]
   },
   "devDependencies": {
+    "@tsconfig/create-react-app": "^1.0.3",
+    "@tsconfig/node18": "^2.0.1",
     "@types/jest": "^29.5.1",
     "@types/node": "^20.1.7",
     "@types/react": "^18.2.6",

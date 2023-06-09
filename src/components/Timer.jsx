@@ -32,8 +32,7 @@ const Timer = (props) => {
   const resetTimer = useCallback(() => {
     clearInterval(intervalId);
     intervalId = null;
-    resetMusic();
-  }, [resetMusic])
+  }, [])
 
   // 역할 : 타이머 interval 설정
   useEffect(() => {
@@ -48,6 +47,7 @@ const Timer = (props) => {
       setTimerHeight(value * time);
       if (time === 0) {
         resetTimer();
+        resetMusic();
         changeIsGameOver(true);
       } else if (time === 60) {
         changeMusicRate(1.25);
@@ -59,7 +59,7 @@ const Timer = (props) => {
     return () => {
       resetTimer();
     }
-  }, [playCnt, changeIsGameOver, changeMusicRate, resetTimer])
+  }, [playCnt, changeIsGameOver, changeMusicRate, resetTimer, resetMusic])
 
   return (
     <Wrapper ref={timerDiv}>

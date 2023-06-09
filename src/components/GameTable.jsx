@@ -227,7 +227,7 @@ const GameTable = (props) => {
       if (count === 10) {
         changeScore(v => v + (ei - si) * (ej - sj));
         changeList(tempArray);
-        audio.play();
+        audio.playAudio();
       }
 
       setStartBear(null);

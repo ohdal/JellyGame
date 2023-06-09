@@ -1,26 +1,27 @@
-import React, { useEffect, useCallback, useState, useContext } from 'react'
-import { useHistory } from 'react-router-dom'
-import styled from 'styled-components'
+import React, { useEffect, useCallback, useState, useContext } from "react";
+import { useHistory } from "react-router-dom";
+import styled from "styled-components";
+import MyAudio from "../utils/MyAudio";
 
-import { ModalContext } from '../containers/ModalContainer'
+import { ModalContext } from "../containers/ModalContainer";
 
-import ScoreBox from '../components/ScoreBox'
-import VolumeSlider from '../components/VolumeSlider'
-import GameTable from '../components/GameTable'
-import Timer from '../components/Timer'
+import ScoreBox from "../components/ScoreBox";
+import VolumeSlider from "../components/VolumeSlider";
+import GameTable from "../components/GameTable";
+import Timer from "../components/Timer";
 
-import jelly1 from '../assets/images/jelly_type_1.png'
-import jelly2 from '../assets/images/jelly_type_2.png'
-import jelly3 from '../assets/images/jelly_type_3.png'
-import jelly4 from '../assets/images/jelly_type_4.png'
-import jelly5 from '../assets/images/jelly_type_5.png'
-import jelly6 from '../assets/images/jelly_type_6.png'
-import icon_home from '../assets/images/home.png'
-import icon_replay from '../assets/images/replay.png'
+import jelly1 from "../assets/images/jelly_type_1.png";
+import jelly2 from "../assets/images/jelly_type_2.png";
+import jelly3 from "../assets/images/jelly_type_3.png";
+import jelly4 from "../assets/images/jelly_type_4.png";
+import jelly5 from "../assets/images/jelly_type_5.png";
+import jelly6 from "../assets/images/jelly_type_6.png";
+import icon_home from "../assets/images/home.png";
+import icon_replay from "../assets/images/replay.png";
 
-import effect_btn from '../assets/media/effect_buttonclick.mp3'
-import effect_mouse from '../assets/media/effect_mouseup.mp3'
-import music_background from '../assets/media/music_background.mp3'
+import effect_btn from "../assets/media/effect_buttonclick.mp3";
+import effect_mouse from "../assets/media/effect_mouseup.mp3";
+import music_background from "../assets/media/music_background.mp3";
 
 const GameLayout = styled.div`
   position: relative;
@@ -51,12 +52,13 @@ const Toolbar = styled.div`
     float: right;
     text-align: right;
 
-    >:not(:last-child) {
+    > :not(:last-child) {
       margin-right: 5px;
     }
   }
 
-  .left, .right {
+  .left,
+  .right {
     > div {
       display: inline-block;
     }
@@ -66,7 +68,7 @@ const Toolbar = styled.div`
     font-size: 20px;
     font-weight: bold;
     color: #66a7ba;
-  } 
+  }
 
   > * {
     margin-bottom: 10px;
@@ -105,51 +107,31 @@ const HowToButton = styled.p`
   color: #66a7ba;
   font-size: 15px;
   font-weight: bold;
-  text-align: center; 
-`
+  text-align: center;
+`;
 
 const jellyList = [jelly1, jelly2, jelly3, jelly4, jelly5, jelly6];
 
 const DEFAULT_VOLUME = 0.3;
-const effectMouseAudio = new Audio(effect_mouse);
-const effectBtnAudio = new Audio(effect_btn);
-const musicAudio = new Audio(music_background);
-
-musicAudio.loop = true;
-musicAudio.volume = DEFAULT_VOLUME;
-effectBtnAudio.volume = DEFAULT_VOLUME * 1.5;
-effectMouseAudio.volume = DEFAULT_VOLUME * 1.5;
+const audio_effect_mouse = new MyAudio(effect_mouse, DEFAULT_VOLUME * 1.5);
+const audio_effect_btn = new MyAudio(effect_btn, DEFAULT_VOLUME * 1.5);
+const audio_music_background = new MyAudio(music_background, DEFAULT_VOLUME, true);
 
 // 기능 : min 이상 max 미만의 랜덤값을 반환
 // 인자 : 최솟값 min, 최댓값 max
 const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min)) + min;
-}
-
-// 기능 : 배경음악 reset
-// 인자 : 없음
-const resetMusic = () => {
-  musicAudio.pause();
-  musicAudio.playbackRate = 1.0;
-  musicAudio.currentTime = 0;
-}
-
-// 기능 : 배경음악 속도 조절
-// 인자 : 속도 값 speed (기본 1.0)
-const changeMusicRate = (speed) => {
-  musicAudio.playbackRate = speed;
-}
+};
 
 // 기능 : 모든 Audio 객체 볼륨 조절
 // 인자 : 볼륨 값 volume (기본 1.0)
 const changeVolume = (volume) => {
   // effectVolume이 배경음악보다 작기 때문에 1.5배
   const effectVolume = volume * 1.5;
-  effectBtnAudio.volume = effectVolume > 1 ? 1 : effectVolume;
-  effectMouseAudio.volume = effectVolume > 1 ? 1 : effectVolume;
-
-  musicAudio.volume = volume;
-}
+  audio_effect_btn.changeVolume(effectVolume > 1 ? 1 : effectVolume);
+  audio_effect_mouse.changeVolume(effectVolume > 1 ? 1 : effectVolume);
+  audio_music_background.changeVolume(volume);
+};
 
 export default function GamePage() {
   const [list, setList] = useState([]); // 2차원 배열 Array
@@ -163,13 +145,17 @@ export default function GamePage() {
   // 인자 : 없음
   const createList = useCallback(() => {
     // 선언형 👉🏻
-    const temp = Array.from(Array(10), () => Array(15).fill(null).map(() => {
-      return {
-        visible: true,
-        value: getRandomInt(1, 10),
-        src: jellyList[getRandomInt(0, jellyList.length)],
-      }
-    }))
+    const temp = Array.from(Array(10), () =>
+      Array(15)
+        .fill(null)
+        .map(() => {
+          return {
+            visible: true,
+            value: getRandomInt(1, 10),
+            src: jellyList[getRandomInt(0, jellyList.length)],
+          };
+        })
+    );
 
     /* 명령형 👉🏻
     for (let i = 0; i < 10; i++) {
@@ -185,53 +171,68 @@ export default function GamePage() {
     } */
 
     setList(temp);
-  }, [])
+  }, []);
 
   // 기능 : '/' url로 이동
   // 인자 : 없음
   const handleHomeButton = useCallback(() => {
-    history.push('/');
-  }, [history])
-  
+    history.push("/");
+  }, [history]);
+
   // 기능 : playCnt state 값 증가
   // 인자 : 없음
   const handleReplayButton = useCallback(() => {
-    setPlayCnt(v => v + 1);
-  }, [])
+    setPlayCnt((v) => v + 1);
+  }, []);
 
   // 역할 : playCnt state 변경시 replay 처리
   useEffect(() => {
-    musicAudio.play();
+    audio_music_background.playAudio();
     setIsGameOver(false);
     setScore(0);
     createList();
-  }, [playCnt, createList])
-  
+  }, [playCnt, createList]);
+
   // 역할 : GamePage.jsx mount시 audio 볼륨 default로 설정
   useEffect(() => {
     changeVolume(DEFAULT_VOLUME);
-  }, [])
+
+    return () => {
+      audio_music_background.resetAudio();
+    }
+  }, []);
 
   return (
     <GameLayout>
-      <HowToButton className="pointer"
-        onClick={() => { modalContext.modal.current.toggle() }}>
+      <HowToButton
+        className="pointer"
+        onClick={() => {
+          modalContext.modal.current.toggle();
+        }}
+      >
         ?
       </HowToButton>
       <GameLayoutInner>
         <Toolbar>
           <div className="left">
-            <ImgButton onClick={() => {
-              handleHomeButton();
-              effectBtnAudio.play();
-            }}>
-              Home<img alt="home" src={icon_home} />
+            <ImgButton
+              onClick={() => {
+                handleHomeButton();
+                audio_effect_btn.playAudio();
+              }}
+            >
+              Home
+              <img alt="home" src={icon_home} />
             </ImgButton>
-            <ImgButton onClick={() => {
-              handleReplayButton();
-              effectBtnAudio.play();
-            }}>
-              Replay<img alt="replay" src={icon_replay} />
+            <ImgButton
+              onClick={() => {
+                handleReplayButton();
+                audio_effect_btn.playAudio();
+                audio_music_background.resetAudio();
+              }}
+            >
+              Replay
+              <img alt="replay" src={icon_replay} />
             </ImgButton>
           </div>
           <div className="right">
@@ -244,12 +245,16 @@ export default function GamePage() {
           isGameOver={isGameOver}
           changeList={setList}
           changeScore={setScore}
-          audio={effectMouseAudio}
+          audio={audio_effect_mouse}
         >
-          <Timer playCnt={playCnt} changeIsGameOver={setIsGameOver}
-            resetMusic={resetMusic} changeMusicRate={changeMusicRate} />
+          <Timer
+            playCnt={playCnt}
+            changeIsGameOver={setIsGameOver}
+            resetMusic={audio_music_background.resetAudio}
+            changeMusicRate={audio_music_background.changeRate}
+          />
         </GameTable>
       </GameLayoutInner>
     </GameLayout>
-  )
+  );
 }
