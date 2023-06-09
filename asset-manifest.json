@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/JellyGame/static/css/main.7fc00349.chunk.css",
-    "main.js": "/JellyGame/static/js/main.01a6e701.chunk.js",
-    "main.js.map": "/JellyGame/static/js/main.01a6e701.chunk.js.map",
-    "runtime-main.js": "/JellyGame/static/js/runtime-main.c31812e1.js",
-    "runtime-main.js.map": "/JellyGame/static/js/runtime-main.c31812e1.js.map",
-    "static/js/2.3d86a6f1.chunk.js": "/JellyGame/static/js/2.3d86a6f1.chunk.js",
-    "static/js/2.3d86a6f1.chunk.js.map": "/JellyGame/static/js/2.3d86a6f1.chunk.js.map",
-    "static/js/3.d2eb6df5.chunk.js": "/JellyGame/static/js/3.d2eb6df5.chunk.js",
-    "static/js/3.d2eb6df5.chunk.js.map": "/JellyGame/static/js/3.d2eb6df5.chunk.js.map",
+    "main.css": "/JellyGame/static/css/main.a4362421.chunk.css",
+    "main.js": "/JellyGame/static/js/main.44364c5d.chunk.js",
+    "main.js.map": "/JellyGame/static/js/main.44364c5d.chunk.js.map",
+    "runtime-main.js": "/JellyGame/static/js/runtime-main.e25f6dc5.js",
+    "runtime-main.js.map": "/JellyGame/static/js/runtime-main.e25f6dc5.js.map",
+    "static/js/2.049f9e97.chunk.js": "/JellyGame/static/js/2.049f9e97.chunk.js",
+    "static/js/2.049f9e97.chunk.js.map": "/JellyGame/static/js/2.049f9e97.chunk.js.map",
+    "static/js/3.c1793e03.chunk.js": "/JellyGame/static/js/3.c1793e03.chunk.js",
+    "static/js/3.c1793e03.chunk.js.map": "/JellyGame/static/js/3.c1793e03.chunk.js.map",
     "index.html": "/JellyGame/index.html",
-    "static/css/main.7fc00349.chunk.css.map": "/JellyGame/static/css/main.7fc00349.chunk.css.map",
-    "static/js/2.3d86a6f1.chunk.js.LICENSE.txt": "/JellyGame/static/js/2.3d86a6f1.chunk.js.LICENSE.txt",
+    "static/css/main.a4362421.chunk.css.map": "/JellyGame/static/css/main.a4362421.chunk.css.map",
+    "static/js/2.049f9e97.chunk.js.LICENSE.txt": "/JellyGame/static/js/2.049f9e97.chunk.js.LICENSE.txt",
     "static/media/effect_buttonclick.e4323d06.mp3": "/JellyGame/static/media/effect_buttonclick.e4323d06.mp3",
     "static/media/effect_gameover.58d8dc85.mp3": "/JellyGame/static/media/effect_gameover.58d8dc85.mp3",
     "static/media/effect_mouseup.1247473a.mp3": "/JellyGame/static/media/effect_mouseup.1247473a.mp3",
@@ -29,9 +29,9 @@
     "static/media/music_background.f25a21a9.mp3": "/JellyGame/static/media/music_background.f25a21a9.mp3"
   },
   "entrypoints": [
-    "static/js/runtime-main.c31812e1.js",
-    "static/js/2.3d86a6f1.chunk.js",
-    "static/css/main.7fc00349.chunk.css",
-    "static/js/main.01a6e701.chunk.js"
+    "static/js/runtime-main.e25f6dc5.js",
+    "static/js/2.049f9e97.chunk.js",
+    "static/css/main.a4362421.chunk.css",
+    "static/js/main.44364c5d.chunk.js"
   ]
 }
