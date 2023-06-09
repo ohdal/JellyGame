@@ -1,7 +1,7 @@
 import React, { useEffect, useCallback, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
-import MyAudio from "../utils/MyAudio";
+import CustomAudio from "../utils/CustomAudio";
 
 import { ModalContext } from "../containers/ModalContainer";
 
@@ -113,9 +113,9 @@ const HowToButton = styled.p`
 const jellyList = [jelly1, jelly2, jelly3, jelly4, jelly5, jelly6];
 
 const DEFAULT_VOLUME = 0.3;
-const audio_effect_mouse = new MyAudio(effect_mouse, DEFAULT_VOLUME * 1.5);
-const audio_effect_btn = new MyAudio(effect_btn, DEFAULT_VOLUME * 1.5);
-const audio_music_background = new MyAudio(music_background, DEFAULT_VOLUME, true);
+const audio_effect_mouse = new CustomAudio(effect_mouse, DEFAULT_VOLUME * 1.5);
+const audio_effect_btn = new CustomAudio(effect_btn, DEFAULT_VOLUME * 1.5);
+const audio_music_background = new CustomAudio(music_background, DEFAULT_VOLUME, true);
 
 // 기능 : min 이상 max 미만의 랜덤값을 반환
 // 인자 : 최솟값 min, 최댓값 max
@@ -199,7 +199,7 @@ export default function GamePage() {
 
     return () => {
       audio_music_background.resetAudio();
-    }
+    };
   }, []);
 
   return (

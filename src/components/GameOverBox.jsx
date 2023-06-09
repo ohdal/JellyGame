@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import MyAudio from '../utils/MyAudio'
+import CustomAudio from '../utils/CustomAudio'
 
 import game_over_bg from '../assets/images/gameover_BG.png'
 import game_over from '../assets/images/gameover.png'
@@ -43,7 +43,7 @@ const GameOverImg = styled.div`
   }
 `
 
-const audio_effect = new MyAudio(effect_gameover, 0.5);
+const audio_effect = new CustomAudio(effect_gameover, 0.5);
 export default function GameOverBox() {
 
   useEffect(() => {

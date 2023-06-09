@@ -5,7 +5,12 @@ import icon_volume from '../assets/images/volume.png'
 import icon_volume_zero from '../assets/images/volume_zero.png'
 import cursor_pointer from '../assets/images/pointer.png'
 
-const Wrapper = styled.div`
+interface Props {
+  defaultVolume: number;
+  changeVolume: (v: number) => void;
+}
+
+const Wrapper = styled.div<{per: number, pointer: string}>`
   button {
     width: 30px;
     height: 30px;
@@ -21,10 +26,10 @@ const Wrapper = styled.div`
   }
 `
 
-export default function VolumeSlider({ defaultVolume, changeVolume }) {
-  const [value, setValue] = useState(defaultVolume * 100);
+export default function VolumeSlider({ defaultVolume, changeVolume }: Props) {
+  const [value, setValue] = useState<number>(defaultVolume * 100);
 
-  const handleOnChange = useCallback((v) => {
+  const handleOnChange = useCallback((v: number) => {
     setValue(v);
     changeVolume(v * 0.01);
   }, [changeVolume])
@@ -36,7 +41,7 @@ export default function VolumeSlider({ defaultVolume, changeVolume }) {
           width="30px" height="30px" src={value > 0 ? icon_volume : icon_volume_zero} />
       </button>
       <input type="range" min={0} max={100} value={value}
-        onChange={(e) => { handleOnChange(e.target.value); }} />
+        onChange={(e) => { handleOnChange(Number(e.target.value)); }} />
     </Wrapper>
   )
 }

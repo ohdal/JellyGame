@@ -7,7 +7,7 @@ import MobilePage from './pages/MobilePage';
 
 
 // mobile 기기 체크
-function detectMobileDevice(agent) {
+function detectMobileDevice(agent: string): boolean {
   const mobileRegex = [
     /Android/i,
     /iPhone/i,
@@ -43,7 +43,6 @@ function App() {
               </Route>
             </Switch>
           </ModalContainer>
-
       }
     </div>
   );
