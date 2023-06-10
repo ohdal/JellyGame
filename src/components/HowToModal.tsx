@@ -1,9 +1,9 @@
-import React, { useState, useCallback, useRef, forwardRef, useImperativeHandle } from 'react'
-import styled from 'styled-components'
+import React, { useState, useCallback, useRef, forwardRef, useImperativeHandle } from "react";
+import styled from "styled-components";
 
-import gif_howto_1 from '../assets/images/howto_1.gif'
-import gif_howto_2 from '../assets/images/howto_2.gif'
-import gif_howto_3 from '../assets/images/howto_3.gif'
+import gif_howto_1 from "../assets/images/howto_1.gif";
+import gif_howto_2 from "../assets/images/howto_2.gif";
+import gif_howto_3 from "../assets/images/howto_3.gif";
 
 const Wrapper = styled.div`
   position: absolute;
@@ -12,8 +12,8 @@ const Wrapper = styled.div`
   width: 100%;
   height: 100%;
   z-index: 1000;
-  background: rgba(0,0,0,.5);
-`
+  background: rgba(0, 0, 0, 0.5);
+`;
 
 const Modal = styled.div`
   position: absolute;
@@ -27,7 +27,7 @@ const Modal = styled.div`
   border: 3px solid #66a7ba;
   border-radius: 10px;
   z-index: 1100;
-`
+`;
 
 const Header = styled.div`
   width: 100%;
@@ -37,10 +37,10 @@ const Header = styled.div`
   font-weight: bold;
   text-align: center;
   color: #66a7ba;
-  
+
   .button-layout {
     float: right;
-    
+
     .cancle-btn {
       vertical-align: top;
       width: 30px;
@@ -53,9 +53,9 @@ const Header = styled.div`
       color: #171a1e;
     }
   }
-  `
+`;
 
-const Content = styled.div`
+const Content = styled.div<{ ref: React.RefObject<HTMLDivElement> }>`
   width: 100%;
   height: calc(100% - 48px);
   padding-top: 10px;
@@ -74,68 +74,74 @@ const Content = styled.div`
       color: #faa3a3;
     }
   }
-  `
+`;
 
 const ImgLayout = styled.div`
-    position: relative;
-    width: 300px;
-    height: 250px;
-    margin: 10px auto 40px auto;
-    overflow: hidden;
+  position: relative;
+  width: 300px;
+  height: 250px;
+  margin: 10px auto 40px auto;
+  overflow: hidden;
 
-    img {
-      object-fit: cover;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-    }
-  `
+  img {
+    object-fit: cover;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+`;
 
 const HowToModal = forwardRef((props, ref) => {
   const [visible, setVisible] = useState(false);
-  const contentRef = useRef();
+  const contentRef = useRef<HTMLDivElement>(null);
 
   useImperativeHandle(ref, () => ({
     toggle,
-  }))
+  }));
 
   // 기능 : HowToModal.jsx 컴포넌트 toggle & scrollTop 초기화
   // 인자 : 없음
   const toggle = useCallback(() => {
-    setVisible(v => !v);
-    if (visible) contentRef.current.scrollTop = 0;
-  }, [visible])
+    setVisible((v) => !v);
+    if (visible && contentRef.current) {
+      contentRef.current.scrollTop = 0;
+    }
+  }, [visible]);
 
   return (
-    <Wrapper style={{ display: visible ? 'block' : 'none' }}>
+    <Wrapper style={{ display: visible ? "block" : "none" }}>
       <Modal>
         <Header>
           HOW TO ?
           <div className="button-layout">
-            <button className="cancle-btn"
-              onClick={toggle}>
+            <button className="cancle-btn" onClick={toggle}>
               x
             </button>
           </div>
         </Header>
         <Content ref={contentRef}>
-          <p className="title">제한시간 <span>150초</span> 내에 최대한 많은 젤리를 없애보세요 🤩</p>
+          <p className="title">
+            제한시간 <span>150초</span> 내에 최대한 많은 젤리를 없애보세요 🤩
+          </p>
           <ul>
             <li>
-              드래그한 젤리 숫자의 합이 10인 경우, 젤리를 없앨 수 있어요.<br />
+              드래그한 젤리 숫자의 합이 10인 경우, 젤리를 없앨 수 있어요.
+              <br />
               <ImgLayout>
                 <img alt="img" src={gif_howto_1} width="100%" height="100%" />
               </ImgLayout>
             </li>
             <li>
-              점수는 젤리 갯수에따라 카운트 되요.<br />
+              점수는 젤리 갯수에따라 카운트 되요.
+              <br />
               <ImgLayout>
                 <img alt="img" src={gif_howto_2} width="100%" height="100%" />
               </ImgLayout>
             </li>
             <li>
-              언제든 다시 시작할 수 있어요.<br />
+              언제든 다시 시작할 수 있어요.
+              <br />
               <ImgLayout>
                 <img alt="img" src={gif_howto_3} width="100%" height="100%" />
               </ImgLayout>
@@ -144,7 +150,7 @@ const HowToModal = forwardRef((props, ref) => {
         </Content>
       </Modal>
     </Wrapper>
-  )
-})
+  );
+});
 
 export default HowToModal;

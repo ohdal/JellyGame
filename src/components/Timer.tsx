@@ -2,6 +2,13 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import styled from "styled-components";
 import { ChangeVolume } from "../types";
 
+interface Props {
+  playCnt: number;
+  changeIsGameOver: React.Dispatch<React.SetStateAction<boolean>>;
+  changeMusicRate: ChangeVolume;
+  resetMusic: () => void;
+}
+
 const Wrapper = styled.div<{ ref: React.RefObject<HTMLDivElement> }>`
   position: relative;
   width: 30px;
@@ -17,13 +24,6 @@ const TimerInner = styled.div`
   background: #66a7ba;
   bottom: 0;
 `;
-
-interface Props {
-  playCnt: number;
-  changeIsGameOver: React.Dispatch<React.SetStateAction<boolean>>;
-  changeMusicRate: ChangeVolume;
-  resetMusic: () => void;
-}
 
 const TIME_VALUE = 150;
 let time = TIME_VALUE;
