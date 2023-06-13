@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, forwardRef, useImperativeHandle } from 'react'
+import React, { useEffect, useState, useCallback, forwardRef, useImperativeHandle, MouseEvent } from 'react'
 import styled from 'styled-components'
 
 const Wrapper = styled.div`
@@ -12,8 +12,31 @@ const Wrapper = styled.div`
   left: 13px;
 `;
 
-const DragComponent = forwardRef((props, ref) => {
-  const { isDrag, mouseEvent, checkBear } = props;
+type Props = {
+  className: string;
+  isDrag: boolean;
+  checkEvent: (e: React.MouseEvent<HTMLDivElement>, isTdTag?: boolean) => void;
+  checkBear: (row: number | null, col: number | null, state: string) => void;
+}
+
+type GetAreaSizeType = () => {width: number, height: number};
+type SetAreaSizeType = (data: {w: number, h: number}) => void;
+type GetDirectionType = () => string;
+type SetDirectionType = (dir: string) => void;
+type GetAreaPosType = () => {x: number, y: number};
+type SetAreaPosType = (data: {x: number, y: number}) => void;
+
+export type DragComponentHandle = {
+  getAreaSize: GetAreaSizeType;
+  setAreaSize: SetAreaSizeType;
+  getDirection: GetDirectionType;
+  setDirection: SetDirectionType,
+  getAreaPos: GetAreaPosType,
+  setAreaPos: SetAreaPosType,
+};
+
+const DragComponent = forwardRef<DragComponentHandle, Props>((props, ref) => {
+  const { isDrag, checkEvent, checkBear } = props;
 
   const [dir, setDir] = useState("rightBottom"); // 사용자 드래그 방향 string
   const [width, setWidth] = useState(52); // 드래그 컴포넌트 너비 number
@@ -32,13 +55,13 @@ const DragComponent = forwardRef((props, ref) => {
 
   // 기능 : width, height statea 값 반환
   // 인자 : 없음
-  const getAreaSize = useCallback(() => {
+  const getAreaSize: GetAreaSizeType = useCallback(() => {
     return { width, height };
   }, [width, height])
 
   // 기능 : width, height state 값 반환
   // 인자 : 없음
-  const setAreaSize = useCallback(({ h, w }) => {
+  const setAreaSize: SetAreaSizeType = useCallback(({ w, h }) => {
     /* 
     한번더 isDrag 체크하기
     throttle 기능 때문에 isDrag가 false인데
@@ -55,25 +78,25 @@ const DragComponent = forwardRef((props, ref) => {
 
   // 기능 : dir state 값 반황
   // 인자 : 없음
-  const getDirection = useCallback(() => {
+  const getDirection: GetDirectionType = useCallback(() => {
     return dir;
   }, [dir])
 
   // 기능 : dir state 값 변경
   // 인자 : 변경값 string
-  const setDirection = useCallback((str) => {
-    setDir(str);
+  const setDirection: SetDirectionType = useCallback((dir) => {
+    setDir(dir);
   }, [])
 
   // 기능 : xPos, yPos state 값 반환
   // 인자 : 없음
-  const getAreaPos = useCallback(() => {
+  const getAreaPos: GetAreaPosType = useCallback(() => {
     return { x: xPos, y: yPos };
   }, [xPos, yPos])
 
   // 기능 : xPos, yPos state 값 변경
   // 인자 : xPos 값 x number, yPos 값 y number
-  const setAreaPos = useCallback(({ x, y }) => {
+  const setAreaPos: SetAreaPosType = useCallback(({ x, y }) => {
     setXPos(x);
     setYPos(y);
   }, [])
@@ -130,10 +153,12 @@ const DragComponent = forwardRef((props, ref) => {
         transform: computedPos(),
       }}
       onMouseUp={(e) => {
-        mouseEvent(e);
+        checkEvent(e);
         checkBear(null, null, "Up");
       }}
-      onMouseMove={mouseEvent}
+      onMouseMove={(e) => {
+        checkEvent(e);
+      }}
     />
   )
 })

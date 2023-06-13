@@ -7,7 +7,7 @@ import game_over from '../assets/images/gameover.png'
 
 import effect_gameover from '../assets/media/effect_gameover.mp3'
 
-const GameOverImg = styled.div`
+const GameOverImg = styled.div<{src: string}>`
   width: 100%;
   background: url(${props => props.src}), no-repeat;
 

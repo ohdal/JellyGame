@@ -1,18 +1,19 @@
 import React from 'react'
 import styled from 'styled-components'
 
+
+const Wrapper = styled.div`
+span {
+  border-radius: 20px;
+  border: 3px solid #66a7ba;
+  margin-left: 10px;
+  padding: 0 20px 2px 20px;
+}
+`;
+
 interface Props {
   score: number;
 }
-
-const Wrapper = styled.div`
-  span {
-    border-radius: 20px;
-    border: 3px solid #66a7ba;
-    margin-left: 10px;
-    padding: 0 20px 2px 20px;
-  }
-`;
 
 const ScoreBox = (props: Props) => {
   const { score } = props;

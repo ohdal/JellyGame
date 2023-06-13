@@ -92,7 +92,13 @@ const ImgLayout = styled.div`
   }
 `;
 
-const HowToModal = forwardRef((props, ref) => {
+type Props = {}
+
+export type HowToModalHandle = {
+  toggle: () => void;
+};
+
+const HowToModal = forwardRef<HowToModalHandle, Props>((props, ref) => {
   const [visible, setVisible] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
 

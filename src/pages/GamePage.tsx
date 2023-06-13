@@ -2,6 +2,7 @@ import React, { useEffect, useCallback, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import CustomAudio from "../utils/CustomAudio";
+import { BearList } from "../types";
 
 import { ModalContext } from "../containers/ModalContainer";
 
@@ -119,13 +120,13 @@ const audio_music_background = new CustomAudio(music_background, DEFAULT_VOLUME,
 
 // 기능 : min 이상 max 미만의 랜덤값을 반환
 // 인자 : 최솟값 min, 최댓값 max
-const getRandomInt = (min, max) => {
+const getRandomInt = (min: number, max: number): number => {
   return Math.floor(Math.random() * (max - min)) + min;
 };
 
 // 기능 : 모든 Audio 객체 볼륨 조절
 // 인자 : 볼륨 값 volume (기본 1.0)
-const changeVolume = (volume) => {
+const changeVolume = (volume: number): void => {
   // effectVolume이 배경음악보다 작기 때문에 1.5배
   const effectVolume = volume * 1.5;
   audio_effect_btn.changeVolume(effectVolume > 1 ? 1 : effectVolume);
@@ -134,7 +135,7 @@ const changeVolume = (volume) => {
 };
 
 export default function GamePage() {
-  const [list, setList] = useState([]); // 2차원 배열 Array
+  const [list, setList] = useState<BearList[][]>([]); // 2차원 배열 Array
   const [score, setScore] = useState(0); // 점수 number
   const [isGameOver, setIsGameOver] = useState(false); // 게임오버 여부 boolean
   const [playCnt, setPlayCnt] = useState(0); // 게임 재시작 카운트 number
@@ -145,7 +146,7 @@ export default function GamePage() {
   // 인자 : 없음
   const createList = useCallback(() => {
     // 선언형 👉🏻
-    const temp = Array.from(Array(10), () =>
+    const temp: BearList[][] = Array.from(Array(10), () =>
       Array(15)
         .fill(null)
         .map(() => {
@@ -207,7 +208,7 @@ export default function GamePage() {
       <HowToButton
         className="pointer"
         onClick={() => {
-          modalContext.modal.current.toggle();
+          if (modalContext?.modal.current) modalContext.modal.current.toggle();
         }}
       >
         ?

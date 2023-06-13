@@ -7,7 +7,7 @@ body,
   min-height: 700px;
   overflow: auto;
 
-  @media screen and (max-width:767px){ 
+  @media screen and (max-width: 767px) {
     min-width: 100%;
     min-height: 100%;
     overflow: hidden;
@@ -54,7 +54,7 @@ body,
     border: 2px solid #548999;
     border-radius: 50%;
     background: #66a7ba;
-    transition: background .3s ease-in-out;
+    transition: background 0.3s ease-in-out;
     cursor: url("./assets/images/pointer.png"), auto !important;
   }
 }
@@ -66,7 +66,7 @@ body,
   text-align: center;
   background-color: #282c34;
 
-  @media screen and (max-width:767px){ 
+  @media screen and (max-width: 767px) {
     display: flex;
     justify-content: center;
     min-width: 100%;
@@ -85,7 +85,6 @@ body,
 
       g {
         animation: App-bear infinite 10s linear;
-
       }
     }
   }
@@ -97,46 +96,46 @@ body,
 
 @keyframes App-bear {
   0% {
-    fill: #F96565;
+    fill: #f96565;
   }
 
   10% {
-    fill: #A8534B;
+    fill: #a8534b;
   }
 
   20% {
-    fill: #EC9D75;
+    fill: #ec9d75;
   }
 
   30% {
-    fill: #F9D697;
+    fill: #f9d697;
   }
 
   40% {
-    fill: #DCE6A7;
+    fill: #dce6a7;
   }
 
   50% {
-    fill: #959D6A;
+    fill: #959d6a;
   }
 
   60% {
-    fill: #82AECD;
+    fill: #82aecd;
   }
 
   70% {
-    fill: #41628A;
+    fill: #41628a;
   }
 
   80% {
-    fill: #9978B4;
+    fill: #9978b4;
   }
 
   90% {
-    fill: #AA6CA0;
+    fill: #aa6ca0;
   }
 
   100% {
-    fill: #F96565;
+    fill: #f96565;
   }
 }
