@@ -2,7 +2,6 @@ import React, { useEffect, useCallback, useState, useContext } from "react";
 import { useHistory } from "react-router-dom";
 import styled from "styled-components";
 import CustomAudio from "../utils/CustomAudio";
-import { BearList } from "../types";
 
 import { ModalContext } from "../containers/ModalContainer";
 
@@ -110,6 +109,12 @@ const HowToButton = styled.p`
   font-weight: bold;
   text-align: center;
 `;
+
+export interface BearList {
+  visible: boolean;
+  value: number;
+  src: string;
+}
 
 const jellyList = [jelly1, jelly2, jelly3, jelly4, jelly5, jelly6];
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef, ReactNode } from "react";
 import styled from "styled-components";
-import { BearList } from "types";
+import { BearList } from "pages/GamePage";
 
 import GameOverBox from "./GameOverBox";
 import DragComponent, { DragComponentHandle } from "./DragComponent";
@@ -89,12 +89,12 @@ interface Props {
   audio: CustomAudio;
 }
 
-type ReactEvent = { _reactName: string; clientX: number; clientY: number };
-type MouseEventFunction = (
+export type MouseEventFunction = (
   e: React.MouseEvent<HTMLDivElement | HTMLTableElement> | ReactEvent,
   isTdTag?: boolean
 ) => void;
-type ScoreCheckFunction = (row: number | null, col: number | null, state: string) => void;
+export type ScoreCheckFunction = (row: number | null, col: number | null, state: string) => void;
+type ReactEvent = { _reactName: string; clientX: number; clientY: number };
 type ComputedDragAreaSize = (isMinus: boolean, type: string, value: number) => number;
 type Throttle = (data: { width: number; height: number }, fn: () => { w: number; h: number }, delay: number) => void;
 

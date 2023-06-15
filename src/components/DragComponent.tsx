@@ -1,5 +1,6 @@
-import React, { useEffect, useState, useCallback, forwardRef, useImperativeHandle, MouseEvent } from 'react'
+import React, { useEffect, useState, useCallback, forwardRef, useImperativeHandle} from 'react'
 import styled from 'styled-components'
+import { MouseEventFunction, ScoreCheckFunction } from './GameTable';
 
 const Wrapper = styled.div`
   width: 52px;
@@ -12,11 +13,11 @@ const Wrapper = styled.div`
   left: 13px;
 `;
 
-type Props = {
+interface Props {
   className: string;
   isDrag: boolean;
-  mouseEvent: (e: React.MouseEvent<HTMLDivElement>, isTdTag?: boolean) => void;
-  scoreCheck: (row: number | null, col: number | null, state: string) => void;
+  mouseEvent: MouseEventFunction;
+  scoreCheck: ScoreCheckFunction;
 }
 
 type GetAreaSizeType = () => {width: number, height: number};

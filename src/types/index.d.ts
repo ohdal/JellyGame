@@ -7,9 +7,3 @@ export interface MyAudio {
   changeVolume: ChangeVolume;
   changeRate: ChangeRate;
 }
-
-export interface BearList {
-  visible: boolean;
-  value: number;
-  src: string;
-}

@@ -92,7 +92,7 @@ const ImgLayout = styled.div`
   }
 `;
 
-type Props = {}
+interface Props {}
 
 export type HowToModalHandle = {
   toggle: () => void;
