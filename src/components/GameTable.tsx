@@ -396,20 +396,8 @@ const GameTable = (props: Props) => {
           mouseEvent={mouseEventFunction}
           scoreCheck={scoreCheckFunction}
         />
-        <Table
-          onMouseLeave={(e) => {
-            mouseEventFunction(e);
-          }}
-        >
-          <tbody
-            id="tbody-area"
-            onMouseMove={(e) => {
-              mouseEventFunction(e);
-            }}
-            onMouseUp={(e) => {
-              mouseEventFunction(e);
-            }}
-          >
+        <Table onMouseLeave={mouseEventFunction}>
+          <tbody id="tbody-area" onMouseMove={mouseEventFunction} onMouseUp={mouseEventFunction}>
             {isGameOver ? (
               <GameOverBox />
             ) : (
