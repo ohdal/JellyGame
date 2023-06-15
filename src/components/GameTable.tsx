@@ -76,8 +76,8 @@ interface ParticleComponentProps {
 
 interface BearListComponentProps {
   list: BearList[][];
-  checkEvent: CheckEvent;
-  checkBear: CheckBear;
+  mouseEvent: MouseEventFunction;
+  scoreCheck: ScoreCheckFunction;
 }
 
 interface Props {
@@ -90,8 +90,11 @@ interface Props {
 }
 
 type ReactEvent = { _reactName: string; clientX: number; clientY: number };
-type CheckEvent = (e: React.MouseEvent<HTMLDivElement | HTMLTableElement> | ReactEvent, isTdTag?: boolean) => void;
-type CheckBear = (row: number | null, col: number | null, state: string) => void;
+type MouseEventFunction = (
+  e: React.MouseEvent<HTMLDivElement | HTMLTableElement> | ReactEvent,
+  isTdTag?: boolean
+) => void;
+type ScoreCheckFunction = (row: number | null, col: number | null, state: string) => void;
 type ComputedDragAreaSize = (isMinus: boolean, type: string, value: number) => number;
 type Throttle = (data: { width: number; height: number }, fn: () => { w: number; h: number }, delay: number) => void;
 
@@ -111,7 +114,7 @@ const ParticleComponent = (props: ParticleComponentProps) => {
 
 // Table 내 tr, td 태그 컴포넌트
 const BearListComponent = (props: BearListComponentProps) => {
-  const { list, checkEvent, checkBear } = props;
+  const { list, mouseEvent, scoreCheck } = props;
 
   return (
     <>
@@ -126,8 +129,8 @@ const BearListComponent = (props: BearListComponentProps) => {
                   key={"col-" + idxc}
                   onMouseDown={(e) => {
                     if (!col.visible) return;
-                    checkEvent(e, true);
-                    checkBear(idxr, idxc, "Down");
+                    mouseEvent(e, true);
+                    scoreCheck(idxr, idxc, "Down");
                   }}
                 >
                   {!col.visible && <ParticleComponent row={idxr} col={idxc} />}
@@ -211,7 +214,7 @@ const GameTable = (props: Props) => {
 
   // 기능 : Mouse 이벤트 발생 시 게임 점수 관련 처리
   // 인자 : row 값 number, col 값 number, 마우스 down, up 상태 값 string
-  const checkBear: CheckBear = useCallback(
+  const scoreCheckFunction: ScoreCheckFunction = useCallback(
     (row, col, state) => {
       if (!dragComponentRef.current) return;
 
@@ -287,7 +290,7 @@ const GameTable = (props: Props) => {
 
   // 기능 : Mouse 관련 이벤트 발생 시 드래그 관련 처리
   // 인자 : 마우스 이벤트 객체 object, 이벤트 발생 객체 <td/> 여부 값 bool
-  const checkEvent: CheckEvent = useCallback(
+  const mouseEventFunction: MouseEventFunction = useCallback(
     (e, isTdTag = false) => {
       /* 
     isTdTag 확인 이유 ?
@@ -297,80 +300,83 @@ const GameTable = (props: Props) => {
     
     하지만 <td />에 달린 MouseDown 이벤트 발생시 위에서 설명한 빈공간을 클릭한 경우
     e.target으로 detection className이 추가되지 않은 <td />가 들어오면서
-    아래 조건문에 걸리게 되고 isDrag는 false 상태이면서 checkBear 함수가 실행되서 오류가 나게 된다.
+    아래 조건문에 걸리게 되고 isDrag는 false 상태이면서 scoreCheckFunction 함수가 실행되서 오류가 나게 된다.
     따라서 detection className 조건 또는 <td /> 인지 확인하는 조건을 추가해주어 처리해준다.
     */
 
       const target = (e as React.MouseEvent<HTMLDivElement | HTMLTableElement>).target as Element;
       const eventName = (e as ReactEvent)._reactName;
 
-      if (target.className.includes("detection") || isTdTag) {
-        if (!isDrag && eventName === "onMouseDown") {
-          // isDrag 변수 설정 (true), 마우스 클릭시의 최초 위치 값 저장
-          setIsDrag(true);
+      switch (eventName) {
+        case "onMouseDown":
+          if (target.className.includes("detection") || isTdTag) {
+            if (!isDrag) {
+              // isDrag 변수 설정 (true), 마우스 클릭시의 최초 위치 값 저장
+              setIsDrag(true);
 
-          // v === true : e.target이 td 태그인 경우
-          startClientX = isTdTag ? target.getClientRects()[0].x : (target.parentNode as Element).getClientRects()[0].x;
-          startClientY = isTdTag ? target.getClientRects()[0].y : (target.parentNode as Element).getClientRects()[0].y;
-        }
+              // v === true : e.target이 td 태그인 경우
+              startClientX = isTdTag
+                ? target.getClientRects()[0].x
+                : (target.parentNode as Element).getClientRects()[0].x;
+              startClientY = isTdTag
+                ? target.getClientRects()[0].y
+                : (target.parentNode as Element).getClientRects()[0].y;
+            } else {
+              // 클릭시 저장된 최초 위치 값과 계속 바뀌는 사용자 위치 값 파악 후, 드래그 영역 방향, 사이즈 설정
+              count++;
+              console.log("throttle 적용 전", count);
 
-        if (isDrag && eventName === "onMouseMove") {
-          // 클릭시 저장된 최초 위치 값과 계속 바뀌는 사용자 위치 값 파악 후, 드래그 영역 방향, 사이즈 설정
-          count++;
-          console.log("throttle 적용 전", count);
+              if (dragComponentRef.current)
+                throttle(
+                  dragComponentRef.current.getAreaSize(),
+                  () => {
+                    if (!dragComponentRef.current) throw new ErrorEvent("dragComponentRef not founded.");
 
-          if (dragComponentRef.current)
-            throttle(
-              dragComponentRef.current.getAreaSize(),
-              () => {
-                if (!dragComponentRef.current) throw new ErrorEvent("dragComponentRef not founded.");
+                    sizeCount++;
+                    console.log("throttle 적용 후", sizeCount);
 
-                sizeCount++;
-                console.log("throttle 적용 후", sizeCount);
+                    let width: number = 0,
+                      height: number = 0;
+                    if (startClientX && startClientY) {
+                      width = e.clientX - startClientX;
+                      height = e.clientY - startClientY;
+                    }
 
-                let width: number = 0,
-                  height: number = 0;
-                if (startClientX && startClientY) {
-                  width = e.clientX - startClientX;
-                  height = e.clientY - startClientY;
-                }
+                    let computedW = 0,
+                      computedH = 0;
+                    if (width >= 0 && height >= 0) {
+                      dragComponentRef.current.setDirection("rightBottom");
+                      computedW = computedDragAreaSize(false, "width", width);
+                      computedH = computedDragAreaSize(false, "height", height);
+                    } else if (width < 0 && height >= 0) {
+                      dragComponentRef.current.setDirection("leftBottom");
+                      computedW = computedDragAreaSize(true, "width", width);
+                      computedH = computedDragAreaSize(false, "height", height);
+                    } else if (width >= 0 && height < 0) {
+                      dragComponentRef.current.setDirection("rightTop");
+                      computedW = computedDragAreaSize(false, "width", width);
+                      computedH = computedDragAreaSize(true, "height", height);
+                    } else {
+                      dragComponentRef.current.setDirection("leftTop");
+                      computedW = computedDragAreaSize(true, "width", width);
+                      computedH = computedDragAreaSize(true, "height", height);
+                    }
 
-                let computedW = 0,
-                  computedH = 0;
-                if (width >= 0 && height >= 0) {
-                  dragComponentRef.current.setDirection("rightBottom");
-                  computedW = computedDragAreaSize(false, "width", width);
-                  computedH = computedDragAreaSize(false, "height", height);
-                } else if (width < 0 && height >= 0) {
-                  dragComponentRef.current.setDirection("leftBottom");
-                  computedW = computedDragAreaSize(true, "width", width);
-                  computedH = computedDragAreaSize(false, "height", height);
-                } else if (width >= 0 && height < 0) {
-                  dragComponentRef.current.setDirection("rightTop");
-                  computedW = computedDragAreaSize(false, "width", width);
-                  computedH = computedDragAreaSize(true, "height", height);
-                } else {
-                  dragComponentRef.current.setDirection("leftTop");
-                  computedW = computedDragAreaSize(true, "width", width);
-                  computedH = computedDragAreaSize(true, "height", height);
-                }
-
-                dragComponentRef.current.setAreaSize({ w: computedW, h: computedH });
-                // console.log(dragComponentRef.currnet);
-                return { w: computedW, h: computedH };
-              },
-              100
-            );
-        }
-      }
-
-      if (eventName === "onMouseUp") {
-        // isDrag 변수 설정 (false)
-        noDragState();
-      }
-      if (eventName === "onMouseLeave" && target.tagName === "TABLE") {
-        // isDrag 변수 설정 (false)
-        noDragState();
+                    dragComponentRef.current.setAreaSize({ w: computedW, h: computedH });
+                    // console.log(dragComponentRef.currnet);
+                    return { w: computedW, h: computedH };
+                  },
+                  100
+                );
+            }
+          }
+          break;
+        case "onMouseUp":
+          noDragState(); // isDrag 변수 설정 (false)
+          break;
+        case "onMouseLeave":
+          if (target.tagName === "TABLE") noDragState(); // isDrag 변수 설정 (false)
+          break;
       }
     },
     [isDrag, noDragState]
@@ -387,27 +393,27 @@ const GameTable = (props: Props) => {
           className="rightBottom"
           isDrag={isDrag}
           ref={dragComponentRef}
-          checkEvent={checkEvent}
-          checkBear={checkBear}
+          mouseEvent={mouseEventFunction}
+          scoreCheck={scoreCheckFunction}
         />
         <Table
           onMouseLeave={(e) => {
-            checkEvent(e);
+            mouseEventFunction(e);
           }}
         >
           <tbody
             id="tbody-area"
             onMouseMove={(e) => {
-              checkEvent(e);
+              mouseEventFunction(e);
             }}
             onMouseUp={(e) => {
-              checkEvent(e);
+              mouseEventFunction(e);
             }}
           >
             {isGameOver ? (
               <GameOverBox />
             ) : (
-              <BearListComponent list={list} checkEvent={checkEvent} checkBear={checkBear} />
+              <BearListComponent list={list} mouseEvent={mouseEventFunction} scoreCheck={scoreCheckFunction} />
             )}
           </tbody>
         </Table>

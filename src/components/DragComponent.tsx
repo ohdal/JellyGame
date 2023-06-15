@@ -15,8 +15,8 @@ const Wrapper = styled.div`
 type Props = {
   className: string;
   isDrag: boolean;
-  checkEvent: (e: React.MouseEvent<HTMLDivElement>, isTdTag?: boolean) => void;
-  checkBear: (row: number | null, col: number | null, state: string) => void;
+  mouseEvent: (e: React.MouseEvent<HTMLDivElement>, isTdTag?: boolean) => void;
+  scoreCheck: (row: number | null, col: number | null, state: string) => void;
 }
 
 type GetAreaSizeType = () => {width: number, height: number};
@@ -36,7 +36,7 @@ export type DragComponentHandle = {
 };
 
 const DragComponent = forwardRef<DragComponentHandle, Props>((props, ref) => {
-  const { isDrag, checkEvent, checkBear } = props;
+  const { isDrag, mouseEvent, scoreCheck } = props;
 
   const [dir, setDir] = useState("rightBottom"); // 사용자 드래그 방향 string
   const [width, setWidth] = useState(52); // 드래그 컴포넌트 너비 number
@@ -153,11 +153,11 @@ const DragComponent = forwardRef<DragComponentHandle, Props>((props, ref) => {
         transform: computedPos(),
       }}
       onMouseUp={(e) => {
-        checkEvent(e);
-        checkBear(null, null, "Up");
+        mouseEvent(e);
+        scoreCheck(null, null, "Up");
       }}
       onMouseMove={(e) => {
-        checkEvent(e);
+        mouseEvent(e);
       }}
     />
   )
