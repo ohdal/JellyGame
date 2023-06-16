@@ -55,7 +55,7 @@ const Header = styled.div`
   }
 `;
 
-const Content = styled.div<{ ref: React.RefObject<HTMLDivElement> }>`
+const Content = styled.div`
   width: 100%;
   height: calc(100% - 48px);
   padding-top: 10px;
