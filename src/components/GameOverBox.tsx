@@ -7,9 +7,9 @@ import game_over from '../assets/images/gameover.png'
 
 import effect_gameover from '../assets/media/effect_gameover.mp3'
 
-const GameOverImg = styled.div<{src: string}>`
+const GameOverImg = styled.div<{$src: string}>`
   width: 100%;
-  background: url(${props => props.src}), no-repeat;
+  background: url(${props => props.$src}), no-repeat;
 
   img {
     width: inherite !important;
@@ -53,7 +53,7 @@ export default function GameOverBox() {
   return (
     <tr>
       <td>
-        <GameOverImg src={game_over_bg}>
+        <GameOverImg $src={game_over_bg}>
           <img alt="" src={game_over} />
         </GameOverImg>
       </td>

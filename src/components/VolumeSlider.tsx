@@ -3,14 +3,14 @@ import styled from 'styled-components'
 
 import icon_volume from '../assets/images/volume.png'
 import icon_volume_zero from '../assets/images/volume_zero.png'
-import cursor_pointer from '../assets/images/pointer.png'
+// import cursor_pointer from '../assets/images/pointer.png'
 
 interface Props {
   defaultVolume: number;
   changeVolume: (v: number) => void;
 }
 
-const Wrapper = styled.div<{per: number, pointer: string}>`
+const Wrapper = styled.div<{$per: number}>`
   button {
     width: 30px;
     height: 30px;
@@ -22,7 +22,7 @@ const Wrapper = styled.div<{per: number, pointer: string}>`
   }
 
   input[type="range"] {
-    background: linear-gradient(to right, #66a7ba 0%, #66a7ba ${props => props.per}%, #171a1e ${props => props.per}%, #171a1e 100%) !important;
+    background: linear-gradient(to right, #66a7ba 0%, #66a7ba ${props => props.$per}%, #171a1e ${props => props.$per}%, #171a1e 100%) !important;
   }
 `
 
@@ -35,7 +35,7 @@ export default function VolumeSlider({ defaultVolume, changeVolume }: Props) {
   }, [changeVolume])
 
   return (
-    <Wrapper per={value} pointer={cursor_pointer}>
+    <Wrapper $per={value}>
       <button onClick={() => { handleOnChange(!value ? 40 : 0) }}>
         <img alt="volume" className="pointer"
           width="30px" height="30px" src={value > 0 ? icon_volume : icon_volume_zero} />
