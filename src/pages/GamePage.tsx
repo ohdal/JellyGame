@@ -253,12 +253,7 @@ export default function GamePage() {
           changeScore={setScore}
           audio={audio_effect_mouse}
         >
-          <Timer
-            playCnt={playCnt}
-            changeIsGameOver={setIsGameOver}
-            resetMusic={audio_music_background.resetAudio}
-            changeMusicRate={audio_music_background.changeRate}
-          />
+          <Timer playCnt={playCnt} changeIsGameOver={setIsGameOver} audio={audio_music_background} />
         </GameTable>
       </GameLayoutInner>
     </GameLayout>

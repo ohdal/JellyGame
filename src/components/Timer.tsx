@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import styled from "styled-components";
-import { ChangeVolume } from "../types";
+import { MyAudio } from "../types";
 
 const Wrapper = styled.div`
   position: relative;
@@ -21,8 +21,7 @@ const TimerInner = styled.div`
 interface Props {
   playCnt: number;
   changeIsGameOver: React.Dispatch<React.SetStateAction<boolean>>;
-  changeMusicRate: ChangeVolume;
-  resetMusic: () => void;
+  audio: MyAudio;
 }
 
 const TIME_VALUE = 150;
@@ -30,7 +29,7 @@ let time = TIME_VALUE;
 let intervalId: NodeJS.Timer | null = null;
 
 const Timer = (props: Props) => {
-  const { playCnt, changeIsGameOver, changeMusicRate, resetMusic } = props;
+  const { playCnt, changeIsGameOver, audio } = props;
   const [timerHeight, setTimerHeight] = useState<number | null>(null); // <TImerInner/> height 값 number
 
   const timerDiv = useRef<HTMLDivElement>(null);
@@ -58,12 +57,12 @@ const Timer = (props: Props) => {
         setTimerHeight(value * time);
         if (time === 0) {
           resetTimer();
-          resetMusic();
+          audio.resetAudio();
           changeIsGameOver(true);
         } else if (time === 60) {
-          changeMusicRate(1.25);
+          audio.changeRate(1.25);
         } else if (time === 30) {
-          changeMusicRate(1.5);
+          audio.changeRate(1.5);
         }
       }, 1000);
     }
@@ -71,7 +70,7 @@ const Timer = (props: Props) => {
     return () => {
       resetTimer();
     };
-  }, [playCnt, changeIsGameOver, changeMusicRate, resetTimer, resetMusic]);
+  }, [playCnt, changeIsGameOver, resetTimer, audio]);
 
   return (
     <Wrapper ref={timerDiv}>
