@@ -1,13 +1,13 @@
 import React, { useState, useCallback } from 'react'
 import styled from 'styled-components'
+import { ChangeVolume } from 'types'
 
 import icon_volume from '../assets/images/volume.png'
 import icon_volume_zero from '../assets/images/volume_zero.png'
-// import cursor_pointer from '../assets/images/pointer.png'
 
 interface Props {
   defaultVolume: number;
-  changeVolume: (v: number) => void;
+  changeVolume: ChangeVolume;
 }
 
 const Wrapper = styled.div<{$per: number}>`
