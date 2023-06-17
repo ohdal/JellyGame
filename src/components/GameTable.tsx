@@ -321,7 +321,12 @@ const GameTable = (props: Props) => {
               startClientY = isTdTag
                 ? target.getClientRects()[0].y
                 : (target.parentNode as Element).getClientRects()[0].y;
-            } else {
+            }
+          }
+          break;
+        case "onMouseMove":
+          if (target.className.includes("detection") || isTdTag) {
+            if (isDrag) {
               // 클릭시 저장된 최초 위치 값과 계속 바뀌는 사용자 위치 값 파악 후, 드래그 영역 방향, 사이즈 설정
               count++;
               console.log("throttle 적용 전", count);
