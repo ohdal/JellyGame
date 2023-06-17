@@ -94,7 +94,7 @@ const ImgLayout = styled.div`
 
 interface Props {}
 
-export type HowToModalHandle = {
+export interface HowToModalHandle {
   toggle: () => void;
 };
 
