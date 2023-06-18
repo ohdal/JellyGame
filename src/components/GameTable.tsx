@@ -305,6 +305,7 @@ const GameTable = (props: Props) => {
     */
 
       const target = e.target as Element;
+      const targetParent = target.parentNode as Element
       const eventName = e._reactName;
 
       switch (eventName) {
@@ -317,10 +318,10 @@ const GameTable = (props: Props) => {
               // v === true : e.target이 td 태그인 경우
               startClientX = isTdTag
                 ? target.getClientRects()[0].x
-                : (target.parentNode as Element).getClientRects()[0].x;
+                : targetParent.getClientRects()[0].x;
               startClientY = isTdTag
                 ? target.getClientRects()[0].y
-                : (target.parentNode as Element).getClientRects()[0].y;
+                : targetParent.getClientRects()[0].y;
             }
           }
           break;
