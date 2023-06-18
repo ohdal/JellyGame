@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef, ReactNode } from "react";
+import React, { useEffect, useState, useCallback, useRef, ReactNode, MouseEvent } from "react";
 import styled from "styled-components";
 import { BearList } from "pages/GamePage";
 
@@ -90,11 +90,11 @@ interface Props {
 }
 
 export type MouseEventFunction = (
-  e: React.MouseEvent<HTMLDivElement | HTMLTableElement> | ReactEvent,
+  e: MouseEvent<HTMLDivElement | HTMLTableElement> & ReactEvent,
   isTdTag?: boolean
 ) => void;
 export type ScoreCheckFunction = (row: number | null, col: number | null, state: string) => void;
-type ReactEvent = { _reactName: string; clientX: number; clientY: number };
+type ReactEvent = { _reactName?: string };
 type ComputedDragAreaSize = (isMinus: boolean, type: string, value: number) => number;
 type Throttle = (data: { width: number; height: number }, fn: () => { w: number; h: number }, delay: number) => void;
 
@@ -304,8 +304,8 @@ const GameTable = (props: Props) => {
     따라서 detection className 조건 또는 <td /> 인지 확인하는 조건을 추가해주어 처리해준다.
     */
 
-      const target = (e as React.MouseEvent<HTMLDivElement | HTMLTableElement>).target as Element;
-      const eventName = (e as ReactEvent)._reactName;
+      const target = e.target as Element;
+      const eventName = e._reactName;
 
       switch (eventName) {
         case "onMouseDown":
