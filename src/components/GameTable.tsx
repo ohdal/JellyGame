@@ -89,12 +89,12 @@ interface Props {
   audio: CustomAudio;
 }
 
+interface ReactEvent { _reactName?: string };
 export type MouseEventFunction = (
   e: MouseEvent<HTMLDivElement | HTMLTableElement> & ReactEvent,
   isTdTag?: boolean
 ) => void;
 export type ScoreCheckFunction = (row: number | null, col: number | null, state: string) => void;
-type ReactEvent = { _reactName?: string };
 type ComputedDragAreaSize = (isMinus: boolean, type: string, value: number) => number;
 type Throttle = (data: { width: number; height: number }, fn: () => { w: number; h: number }, delay: number) => void;
 

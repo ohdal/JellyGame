@@ -1,19 +1,19 @@
-import React, { useEffect } from 'react'
-import styled from 'styled-components'
-import CustomAudio from '../utils/CustomAudio'
+import React, { useEffect } from "react";
+import styled from "styled-components";
+import CustomAudio from "../utils/CustomAudio";
 
-import game_over_bg from '../assets/images/gameover_BG.png'
-import game_over from '../assets/images/gameover.png'
+import game_over_bg from "../assets/images/gameover_BG.png";
+import game_over from "../assets/images/gameover.png";
 
-import effect_gameover from '../assets/media/effect_gameover.mp3'
+import effect_gameover from "../assets/media/effect_gameover.mp3";
 
-const GameOverImg = styled.div<{$src: string}>`
+const GameOverImg = styled.div<{ $src: string }>`
   width: 100%;
-  background: url(${props => props.$src}), no-repeat;
+  background: url(${(props) => props.$src}), no-repeat;
 
   img {
     width: inherite !important;
-    animation: gameover infinite .6s linear;
+    animation: gameover infinite 0.6s linear;
   }
 
   @keyframes gameover {
@@ -41,14 +41,13 @@ const GameOverImg = styled.div<{$src: string}>`
       transform: translate(0, 0);
     }
   }
-`
+`;
 
 const audio_effect = new CustomAudio(effect_gameover, 0.5);
 export default function GameOverBox() {
-
   useEffect(() => {
     audio_effect.playAudio();
-  }, [])
+  }, []);
 
   return (
     <tr>
@@ -58,5 +57,5 @@ export default function GameOverBox() {
         </GameOverImg>
       </td>
     </tr>
-  )
+  );
 }
