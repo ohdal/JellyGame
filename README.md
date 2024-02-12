@@ -54,5 +54,5 @@
 
 보다 상세한 설명은 아래 notion 링크를 참고해주세요. 🙂
 
-<https://ohdal.notion.site/JellyGame-eeade42cb0204cd2a9cdb9c524464183>
+<https://www.notion.so/ohdal/JellyGame-React-Project-3cb76578a67f401aa28245910b86796d?pvs=4>
 
